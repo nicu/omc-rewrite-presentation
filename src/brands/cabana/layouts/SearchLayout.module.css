@@ -1,0 +1,6 @@
+/* Cabana offers one way to pay, so a whole column for the choice is wasted.
+   Filters run across the top instead and the results take the full width. */
+
+.layout { display: flex; flex-direction: column; gap: var(--space-5); padding-block: var(--space-6); }
+.bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); flex-wrap: wrap; }
+.list { display: flex; flex-direction: column; gap: var(--space-4); }

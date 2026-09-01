@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import './tokens/index.css';
+import './tokens';
 import { cache } from './data/cache';
 import { App } from './app/App';
 

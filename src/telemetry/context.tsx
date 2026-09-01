@@ -1,18 +1,24 @@
 /* ============================================================================
    TELEMETRY CONTEXT  ·  "hybrid" model
-   Ambient at the root: tenant, partner, business model, membership tier.
-   Ambient per route: vertical.
-   Explicit per region: the region name (passed to useLoad).
+   Ambient at the root: brand, partner, business model, membership tier.
+   Everything else comes from <Analytics>, which wraps a region from outside.
+
+   Outside matters. useLoad runs as a hook, so it cannot see a provider that
+   its own component renders — put the wrapper inside and the name has to be
+   handed to useLoad as well, and the same string then lives in two places in
+   one file. From outside, one wrapper serves both: the hook reads context and
+   everything below inherits it.
+
    Nothing below this file ever concatenates a name or re-derives a dimension.
    ========================================================================= */
 
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 
-import type { EventName, EventPayloadMap } from './catalog';
+import { DESTINATIONS, type EventName, type EventPayloadMap } from './catalog';
 import type { Adapter } from './adapters';
 
 export type AmbientContext = {
-  tenant: string;
+  brand: string;
   partner: string;
   brandKey: string;
   businessModel: string;
@@ -30,9 +36,6 @@ export type TelemetryEvent = {
 type EmitFn = <E extends EventName>(
   event: E,
   properties: EventPayloadMap[E],
-  /** Only useLoad passes this: it emits from above its own RegionScope, so it
-   *  stamps the region itself. Presenters never supply it. */
-  contextOverride?: Partial<AmbientContext>,
 ) => void;
 
 const AmbientCtx = createContext<AmbientContext | null>(null);
@@ -44,7 +47,7 @@ export const TelemetryRoot = ({
   ...ambient
 }: AmbientContext & { adapters: Adapter[]; children: ReactNode }) => {
   const value = useMemo(() => ambient, [
-    ambient.tenant, ambient.partner, ambient.brandKey,
+    ambient.brand, ambient.partner, ambient.brandKey,
     ambient.businessModel, ambient.membershipTier,
   ]);
   return (
@@ -54,22 +57,33 @@ export const TelemetryRoot = ({
   );
 };
 
-/** One per route. The only nesting in the telemetry system. */
-export const VerticalScope = ({ vertical, children }: { vertical: string; children: ReactNode }) => {
+/**
+ * Names one region, and everything that happens inside it: the region's own
+ * load and failure events, and every action a presenter below reports.
+ *
+ * `vertical` is set where a page starts and inherited by anything nested, so
+ * a checkout step inside a stays flow does not repeat it. `businessModel`
+ * overrides the root's default for pages where the reader chose how to pay —
+ * without it, a search filtered to certificates reports the brand's default.
+ */
+export const Analytics = ({ name, vertical, businessModel, children }: {
+  name: string;
+  vertical?: string;
+  businessModel?: string;
+  children: ReactNode;
+}) => {
   const parent = useContext(AmbientCtx);
-  const value = useMemo(() => ({ ...parent!, vertical }), [parent, vertical]);
-  return <AmbientCtx.Provider value={value}>{children}</AmbientCtx.Provider>;
-};
-
-/** Set by useLoad from its `name` option, so failures and interactions agree. */
-export const RegionScope = ({ region, children }: { region: string; children: ReactNode }) => {
-  const parent = useContext(AmbientCtx);
-  const value = useMemo(() => ({ ...parent!, region }), [parent, region]);
+  const value = useMemo(() => ({
+    ...parent!,
+    region: name,
+    ...(vertical ? { vertical } : {}),
+    ...(businessModel ? { businessModel } : {}),
+  }), [parent, name, vertical, businessModel]);
   return <AmbientCtx.Provider value={value}>{children}</AmbientCtx.Provider>;
 };
 
 export const useAmbient = (): AmbientContext =>
-  useContext(AmbientCtx) ?? { tenant: '', partner: '', brandKey: '', businessModel: '' };
+  useContext(AmbientCtx) ?? { brand: '', partner: '', brandKey: '', businessModel: '' };
 
 /**
  * The emitter presenters and regions use. No-ops outside a TelemetryRoot, which
@@ -80,14 +94,18 @@ export const useEmit = (): EmitFn => {
   const adapters = useContext(AdaptersCtx);
 
   return useMemo<EmitFn>(
-    () => (event, properties, contextOverride) => {
+    () => (event, properties) => {
       if (!context) return;
       const payload: TelemetryEvent = {
         event,
         properties: properties as Record<string, unknown>,
-        context: contextOverride ? { ...context, ...contextOverride } : context,
+        context,
       };
-      for (const adapter of adapters) adapter.send(payload);
+      const allowed = DESTINATIONS[event];
+      for (const adapter of adapters) {
+        if (allowed && !allowed.includes(adapter.name as never)) continue;
+        adapter.send(payload);
+      }
     },
     [context, adapters],
   );

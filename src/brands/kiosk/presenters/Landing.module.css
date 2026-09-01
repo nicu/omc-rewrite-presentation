@@ -1,0 +1,61 @@
+/* ============================================================================
+   KIOSK · the rack
+   A magazine app's home screen: a search line, a shelf you scroll sideways,
+   round category buttons, then the issues in a list. Every piece inside is the
+   shared one — only the shelves are ours.
+   ========================================================================= */
+
+.masthead { padding-block: var(--space-7) var(--space-5); }
+.searchLine { max-width: 44rem; }
+
+/* A shelf: covers side by side, scrolled horizontally, edges bleeding to the
+   gutter so it reads as continuing past the screen. */
+.shelf {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(220px, 24%);
+  gap: var(--space-5);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-block-end: var(--space-3);
+  margin-inline: calc(-1 * var(--page-gutter));
+  padding-inline: var(--page-gutter);
+  /* Without this the snap lands on the scrollport's own edge and ignores the
+     padding above: the first cover comes to rest hard against the side of the
+     screen, out of line with the heading over it. Scroll padding moves the
+     snap line in by the gutter, so a snapped cover sits on the same column as
+     everything else on the page. */
+  scroll-padding-inline: var(--page-gutter);
+  scrollbar-width: none;
+}
+.shelf::-webkit-scrollbar { display: none; }
+.shelf > * { scroll-snap-align: start; }
+
+/* Categories: round, captioned, the row that sits between two shelves. */
+/* Dense on purpose: a rack shows you everything it has at once. auto-fit means
+   the row refills itself as the window narrows instead of leaving four wide
+   gaps. */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: var(--space-5) var(--space-4);
+}
+.category {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-2);
+  background: none; border: none; padding: 0; cursor: pointer;
+  font: inherit; color: inherit;
+}
+.disc {
+  width: 100%; max-width: 76px; aspect-ratio: 1;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: var(--elevation-card);
+}
+.disc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.issues { display: flex; flex-direction: column; gap: var(--space-5); }
+
+@media (max-width: 700px) {
+  .categories { grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); }
+  .shelf { grid-auto-columns: minmax(180px, 62%); }
+}

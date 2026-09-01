@@ -15,9 +15,23 @@
 .close, .clear { font-size: var(--font-size-2xs); color: var(--text-muted); }
 .close { font-size: var(--font-size-md); line-height: 1; }
 
+/* A destructive instrument, so it reads as one rather than as another filter. */
+.action {
+  height: var(--control-height-md);
+  padding-inline: var(--control-padding-x-md);
+  border: var(--border-width-thin) solid var(--status-danger-border);
+  border-radius: var(--control-radius);
+  background: var(--status-danger-bg);
+  color: var(--status-danger-fg);
+  font-size: var(--font-size-2xs);
+  cursor: pointer;
+}
+
 .reopen {
   position: fixed;
-  inset-block-end: var(--space-4);
+  /* Clear of the home indicator and of whatever the browser keeps at the
+     bottom of a phone screen. Zero everywhere that has neither. */
+  inset-block-end: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
   inset-inline-end: var(--space-4);
   z-index: var(--z-toast);
   height: var(--control-height-md);
@@ -32,4 +46,23 @@
   box-shadow: var(--elevation-modal);
 }
 
-@media (max-width: 1100px) { .panel { display: none; } }
+/* It used to be hidden below 1100px, which also hid the only way to open it:
+   the reopen button only renders when the panel is closed, and it starts
+   open. On a phone the controls were simply unreachable. Now it becomes a
+   sheet across the bottom, and it starts closed at this width so it is not
+   sitting on top of the thing it is there to demonstrate. */
+@media (max-width: 1100px) {
+  .panel {
+    inset-block: auto 0;
+    inset-inline: 0;
+    width: auto;
+    /* dvh, not vh: on a phone vh is the tallest the viewport ever gets, so a
+       sheet sized in vh hides its own bottom edge under the browser's bar. */
+    max-height: 80dvh;
+    padding-block-end: env(safe-area-inset-bottom, 0px);
+  }
+  .logScroll { max-height: 30dvh; }
+}
+
+.check { display: flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+.check input { accent-color: var(--text-brand); }

@@ -1,0 +1,43 @@
+/* A cover, not a photo card: a colour block, the picture sunk into it, and the
+   title set over the top the way a masthead would be. */
+.cover {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  background: var(--cover);
+  overflow: hidden;
+  isolation: isolate;
+}
+/* The photograph is left alone. The colour is the band it sits on, not a wash
+   over the picture — tinting the photography makes every place look the same. */
+.cover img {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  height: 74%;
+  width: 100%;
+  object-fit: cover;
+}
+.title {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-3) var(--space-4) 0;
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-lg);
+  line-height: 1.02;
+  text-transform: uppercase;
+  /* Dark ink: all four covers are light pastels, so white would fail on the
+     butter one. One colour that works on all of them beats four that match. */
+  color: var(--text-primary);
+}
+.issue {
+  position: absolute;
+  z-index: 1;
+  inset-block-end: var(--space-3);
+  inset-inline-end: var(--space-4);
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+.caption { padding: var(--space-4); }

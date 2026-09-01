@@ -7,7 +7,7 @@ import type { ReactNode } from 'react';
 import styles from './SearchLayout.module.css';
 
 export type SearchLayoutProps = {
-  /** Tenant- or vertical-specific banner. Omit and the row collapses. */
+  /** Brand- or vertical-specific banner. Omit and the row collapses. */
   banner?: ReactNode;
   filters?: ReactNode;
   toolbar: ReactNode;

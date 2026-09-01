@@ -1,0 +1,35 @@
+.wizard { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px); gap: var(--space-7); align-items: start; padding-block: var(--space-6); }
+.main { display: flex; flex-direction: column; gap: var(--space-5); min-width: 0; }
+.actions { display: flex; justify-content: space-between; gap: var(--space-4); }
+.aside { position: sticky; top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-5); }
+
+.steps { display: flex; flex-direction: column; gap: var(--space-1); }
+.step {
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  background: none;
+  border: 0;
+  display: grid; grid-template-columns: auto 1fr; gap: var(--space-3); align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--control-radius);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+.step[data-state='current'] { background: var(--surface-brand-subtle); color: var(--surface-brand-subtle-fg); font-weight: var(--font-weight-semibold); }
+.step[data-state='done'] { color: var(--text-secondary); cursor: pointer; }
+.step[data-state='done']:hover { background: var(--surface-sunken); color: var(--text-primary); }
+.marker {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: var(--space-5); height: var(--space-5);
+  border-radius: var(--radius-full);
+  border: var(--border-width-thin) solid var(--border-default);
+  font-size: var(--font-size-3xs);
+}
+.step[data-state='current'] .marker { border-color: var(--surface-brand); color: var(--surface-brand-subtle-fg); }
+.step[data-state='done'] .marker { background: var(--surface-brand); color: var(--surface-brand-fg); border-color: var(--surface-brand); }
+
+@media (max-width: 900px) {
+  .wizard { grid-template-columns: minmax(0, 1fr); }
+  .aside { position: static; order: -1; }
+}

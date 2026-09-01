@@ -1,0 +1,47 @@
+/* ============================================================================
+   BRAND · KIOSK
+   The colour on this brand lives in the tags, not the furniture. Four pastels
+   that cycle across a result's chips, plus a soft lift on every card.
+   ========================================================================= */
+
+:root[data-brand='kiosk'] {
+  --space-unit:          4px;
+  --radius-unit:         3.5px;
+  --font-size-base:      15px;
+  --font-family-display: 'Playfair Display', Georgia, serif;
+  --font-family-body:    'Inter', system-ui, sans-serif;
+  --control-tracking:    var(--letter-spacing-normal);
+  --control-transform:   none;
+  --control-font-weight: var(--font-weight-semibold);
+
+  /* The rack: mint, coral, butter, sky. */
+  --tag-tint-1: #dcefe5;  --tag-ink-1: #2f6b56;
+  --tag-tint-2: #fbe3db;  --tag-ink-2: #a85a44;
+  --tag-tint-3: #fbf0d2;  --tag-ink-3: #86691f;
+  --tag-tint-4: #e2ecf8;  --tag-ink-4: #3f6489;
+
+  /* The covers. Each destination gets one, and the title sits on it. */
+  --cover-1: #9db9a8;
+  --cover-2: #e8a691;
+  --cover-3: #f0d68a;
+  --cover-4: #a9c2dc;
+
+  --motion-distance-sm:   14px;
+  --motion-distance-md:   28px;
+  --motion-distance-lg:   56px;
+  --duration-fast:       220ms;
+  --duration-normal:     420ms;
+  --duration-slow:       640ms;
+  --motion-stagger:       70ms;
+}
+
+/* Cards lift off the paper rather than being outlined. */
+:root[data-brand='kiosk'] {
+  --elevation-card:    0 1px 2px rgba(26, 31, 43, 0.04), 0 8px 24px rgba(26, 31, 43, 0.07);
+  --elevation-raised:  0 1px 2px rgba(26, 31, 43, 0.04), 0 4px 14px rgba(26, 31, 43, 0.06);
+}
+
+/* A cover price: top right, where a magazine puts it. */
+:root[data-brand='kiosk'] {
+  --list-aside-align: start;
+}

@@ -28,5 +28,5 @@ const List    = ({ children }: { children: ReactNode }) => <div className={style
 
 export const SearchLayoutCompound = Object.assign(Root, { Banner, Filters, Results, Toolbar, List });
 
-/** Exposed so a tenant fill can ask whether the filter rail is present. */
+/** Exposed so a brand fill can ask whether the filter rail is present. */
 export const useHasFilters = () => useContext(HasFilters);

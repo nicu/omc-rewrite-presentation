@@ -1,9 +1,10 @@
-import { SegmentedChoice } from '../../components/atoms';
+import { SegmentedChoice } from '../../components/primitives';
 import { img } from '../../data/mock/imagery';
-import { OverviewSection, TripsSection, WalletSection } from '../../regions/account';
+import { OVERVIEW, TRIPS, WALLET } from '../../regions/account';
 import { theme } from './theme';
 import type { BrandConfig } from '../types';
-import { FooterNote, MembershipBanner, SignInAside } from './slots';
+import { FooterNote, MembershipBanner, SignInAside } from './presenters/slots';
+import { HeaderBalance } from './regions/HeaderBalance';
 
 /** Earn & burn. Miles are the headline; cash is the fallback. */
 export const atlas: BrandConfig = {
@@ -21,10 +22,14 @@ export const atlas: BrandConfig = {
   defaultBusinessModel: 'earn-burn',
 
   accountSections: [
-    { id: 'overview', label: 'Overview', Panel: OverviewSection },
-    { id: 'bookings', label: 'Trips', Panel: TripsSection },
-    { id: 'wallet', label: 'Payment methods', Panel: WalletSection },
+    { ...OVERVIEW, label: 'Overview' },
+    { ...TRIPS, label: 'Trips' },
+    { ...WALLET, label: 'Payment methods' },
   ],
 
-  overrides: { PaymentChoice: SegmentedChoice, MembershipBanner, SignInAside, FooterNote },
+  overrides: {
+    checkout: { PaymentChoice: SegmentedChoice },
+    chrome:   { MembershipBanner, FooterNote, headerActions: [{ id: 'balance', analytics: 'chrome.balance', Action: HeaderBalance }] },
+    auth:     { Aside: SignInAside },
+  },
 };

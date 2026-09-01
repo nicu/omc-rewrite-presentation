@@ -7,28 +7,33 @@
 
 import { useState } from 'react';
 
-import { Badge, Stack, Text } from '../components/atoms';
-import { SplitLayout } from '../components/layouts';
+import { Badge, Stack, Text } from '../components/primitives';
+import { SplitSignIn } from '../components/layouts';
 import { SignInForm } from '../components/presenters';
 import { rejection, validation, type Failure } from '../errors/failure';
 import { failureMessage } from '../errors/messages';
 import { useEmit } from '../telemetry/context';
 import { useLoad } from '../data/useLoad';
 import { useToast } from '../app/useToast';
-import { useTenant } from '../app/tenant';
+import { useBrand } from '../app/brand';
 import { useRouter } from '../app/router';
+import { armArrival } from '../app/arrival';
+import { signIn } from '../app/session';
 import styles from './SignInRegion.module.css';
 
 export const SignInRegion = () => {
-  const tenant = useTenant();
+  const brand = useBrand();
   const router = useRouter();
   const { showFailure } = useToast();
-  const SignInAside = tenant.overrides?.SignInAside;
+  const SignInAside = brand.overrides?.auth?.Aside;
+  /* Where the parts go is the brand's. What happens when you submit is not. */
+  const SignInLayout = brand.overrides?.auth?.Layout ?? SplitSignIn;
   const emit = useEmit();
 
-  // Nothing to fetch — but this is still a region, so it reports its own view
-  // and provides the scope that tags every event below it.
-  const { Scope } = useLoad({}, { name: 'auth.signin', pageView: 'SIGN_IN_VIEWED' });
+  // Nothing to fetch — but this is still a region: it owns a mutation, and it
+  // reports its own view. The scope that tags everything below comes from the
+  // <Analytics> wrapper around it, not from here.
+  useLoad({}, { pageView: 'SIGN_IN_VIEWED' });
 
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<Failure | null>(null);
@@ -57,7 +62,12 @@ export const SignInRegion = () => {
     }
 
     emit('SIGN_IN_SUCCEEDED', { method: 'password' });
-    router.go({ name: 'account' });
+    /* The next page arrives rather than appears. Both are set here, in the
+       handler that caused them, so nothing downstream has to watch for a
+       sign-in. */
+    signIn();
+    armArrival();
+    router.go({ name: 'landing' });
   };
 
   // Validation stays at the field. Everything else went to the toast already.
@@ -65,37 +75,32 @@ export const SignInRegion = () => {
     failure?.kind === 'validation' ? { [failure.field]: failureMessage(failure) } : undefined;
 
   return (
-    <Scope>
-      <SplitLayout
-        
-        media={<img className={styles.media} src={tenant.signInImage} alt="" />}
-        mediaOverlay={
-          <Stack gap={3} align="start">
-            {SignInAside ? <SignInAside /> : <Badge tone="solid">Welcome back</Badge>}
-            <Text variant="displayMd" tone="onMedia">{tenant.tagline}</Text>
-          </Stack>
-        }
-      >
+    <SignInLayout
+      media={<img className={styles.media} src={brand.signInImage} alt="" />}
+      /* The brand's line. Where it goes, and what it sits on, is the
+         layout's business — so the region does not colour it. */
+      aside={SignInAside ? <SignInAside /> : <Badge tone="solid">Welcome back</Badge>}
+      copy={
         <Stack gap={2}>
           <Text variant="displayMd">Sign in</Text>
           <Text variant="body" tone="secondary">
             Use <code className={styles.hint}>password123</code> with any valid email.
           </Text>
         </Stack>
-
-        <SignInForm
-          busy={busy}
-          errors={fieldErrors}
-          onSubmit={submit}
-          onSignUp={() => {}}
-          onForgotPassword={() => {}}
-          track={{
-            submit: 'SIGN_IN_SUBMITTED',
-            requestSignUp: 'SIGN_UP_REQUESTED',
-            requestReset: 'PASSWORD_RESET_REQUESTED',
-          }}
-        />
-      </SplitLayout>
-    </Scope>
+      }
+    >
+      <SignInForm
+        busy={busy}
+        errors={fieldErrors}
+        onSubmit={submit}
+        onSignUp={() => {}}
+        onForgotPassword={() => {}}
+        track={{
+          submit: 'SIGN_IN_SUBMITTED',
+          requestSignUp: 'SIGN_UP_REQUESTED',
+          requestReset: 'PASSWORD_RESET_REQUESTED',
+        }}
+      />
+    </SignInLayout>
   );
 };

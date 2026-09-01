@@ -8,6 +8,11 @@
   border-block-end: var(--border-width-thin) solid var(--border-subtle);
 }
 
+/* Nothing in the bar wraps: it is a single row of controls, and a button that
+   breaks across two lines makes the whole header taller. Halo's floating pill
+   is the tight case — logo, action and menu inside one rounded strip. */
+.bar button { white-space: nowrap; }
+
 .logo {
   font-family: var(--type-display-md-family);
   font-size: var(--font-size-md);
@@ -32,4 +37,50 @@
 .footer { display: flex; justify-content: space-between; gap: var(--space-6); padding-block: var(--space-7); flex-wrap: wrap; }
 .footerNote { max-width: var(--container-sm); }
 
-@media (max-width: 700px) { .nav { display: none; } }
+/* The menu button is the narrow-screen half of the same list. Exactly one of
+   the two is ever on screen, so nothing is reachable in one and not the
+   other. */
+.menuButton {
+  display: none;
+  width: var(--control-height-md);
+  height: var(--control-height-md);
+  border-radius: var(--control-radius);
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+}
+.menuButton:hover { background: var(--surface-sunken); }
+
+/* Three rules, drawn rather than shipped as an icon. */
+.menuIcon, .menuIcon::before, .menuIcon::after {
+  display: block;
+  width: 18px;
+  height: var(--border-width-thick);
+  background: currentColor;
+  border-radius: var(--radius-full);
+}
+.menuIcon { position: relative; }
+.menuIcon::before, .menuIcon::after { content: ''; position: absolute; inset-inline-start: 0; }
+.menuIcon::before { inset-block-start: -6px; }
+.menuIcon::after  { inset-block-start: 6px; }
+
+.menuList { display: flex; flex-direction: column; }
+.menuItem {
+  padding: var(--space-4) 0;
+  text-align: start;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  border-block-end: var(--border-width-thin) solid var(--border-subtle);
+}
+.menuItem:last-child { border-block-end: none; }
+.menuItem[aria-current='true'] { color: var(--text-brand); font-weight: var(--font-weight-semibold); }
+
+@media (max-width: 760px) {
+  /* The nav was doing the spacing as well as the navigating: it is the only
+     flexible child, so hiding it let the logo and the actions bunch together
+     on the left. With it gone the bar has to space itself. */
+  .bar { justify-content: space-between; }
+  .nav { display: none; }
+  .menuButton { display: flex; }
+}

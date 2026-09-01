@@ -1,18 +1,20 @@
-import { resolve } from 'node:path'
+import { resolve } from "node:path";
 
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import react from "@vitejs/plugin-react";
+import { defineConfig } from "vite";
 
-// Two entries: the POC app, and the slide deck that documents it. The deck
-// imports the app's token files directly rather than copying values.
+// `base: './'` keeps every generated URL relative to the page that loads it,
+// so the same build works at the root during development and under
+// https://<user>.github.io/<repo>/ once it is published.
 export default defineConfig({
+  base: "./",
   plugins: [react()],
   build: {
     rollupOptions: {
       input: {
-        app: resolve(__dirname, 'index.html'),
-        presentation: resolve(__dirname, 'presentation/index.html'),
+        app: resolve(__dirname, "index.html"),
+        slides: resolve(__dirname, "slides/index.html"),
       },
     },
   },
-})
+});

@@ -1,0 +1,449 @@
+/* ============================================================================
+   DECK STYLING
+   Built from the POC's own token files. Nothing here declares a colour, a
+   font size or a spacing value of its own — the deck is themed by exactly the
+   same cascade as the application it describes, which is why the tenant
+   switcher on the Evidence slide retheme s these slides too.
+   ========================================================================= */
+
+.reveal {
+  font-family: var(--type-body-family);
+  font-size: var(--font-size-md);
+  color: var(--text-primary);
+
+  /* A deck must not reflow when you switch the demo brand. Brands still bring
+     their colours, corner radius and heading font; the metrics are pinned so a
+     slide that fits in one brand fits in all of them.
+
+     These are written out rather than derived from --space-unit: the scale is
+     defined on :root, so its calc() is resolved there. Overriding the unit
+     further down the tree does not change the steps that were built from it. */
+  --space-0: 0;    --space-1: 4px;  --space-2: 8px;  --space-3: 12px;
+  --space-4: 16px; --space-5: 24px; --space-6: 32px; --space-7: 48px;
+  --space-8: 64px; --space-9: 96px;
+
+  --font-size-3xs: 10px; --font-size-2xs: 11px; --font-size-xs: 13px;
+  --font-size-sm: 15px;  --font-size-md: 17px;  --font-size-lg: 21px;
+  --font-size-xl: 26px;  --font-size-2xl: 34px; --font-size-3xl: 45px;
+
+  /* Body text keeps one typeface so line wrapping — and therefore slide
+     height — is identical in every brand. Headings still change, which is
+     where the brand is most visible anyway. */
+  --font-family-body: 'Inter', system-ui, sans-serif;
+  --card-padding: var(--space-4);
+  --page-gutter: var(--space-5);
+}
+.reveal-viewport { background: var(--surface-page); }
+
+.reveal .slides { text-align: left; }
+
+/* Titles pin to the top on every slide so they do not jump between slides;
+   the body then centres itself in whatever space is left. */
+/* Sections with more than one slide are vertical stacks, so the horizontal
+   axis is the table of contents and Down goes deeper. Reveal marks the wrapper
+   `.stack` and positions its children itself — only the leaves get the column
+   layout. */
+.reveal .slides > section:not(.stack),
+.reveal .slides > section > section {
+  height: 100%;
+  /* !important is required: reveal writes `display: block` as an inline style
+     on the active section, which would otherwise win over this rule. */
+  display: flex !important;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+.reveal .slides > section.stack { height: 100%; padding: 0; }
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  margin: 0; text-transform: none; letter-spacing: var(--letter-spacing-tight);
+  font-family: var(--type-display-lg-family); color: var(--text-primary);
+}
+.reveal h1 { font-size: var(--font-size-3xl); line-height: var(--line-height-tight); font-weight: var(--font-weight-bold); }
+.reveal h2 { font-size: var(--font-size-2xl); line-height: var(--line-height-tight); font-weight: var(--font-weight-bold); }
+.reveal h3 { font-size: var(--font-size-xl); line-height: var(--line-height-snug); font-weight: var(--font-weight-semibold); }
+.reveal p  { font-size: var(--font-size-sm); line-height: var(--line-height-normal); color: var(--text-secondary); margin: 0; }
+
+.reveal strong { color: var(--text-primary); font-weight: var(--font-weight-semibold); }
+.reveal em { color: var(--text-brand); font-style: normal; }
+.reveal a { color: var(--text-link); }
+
+/* --- slide scaffold ---------------------------------------------------- */
+
+.slide { display: flex; flex-direction: column; gap: var(--space-5); height: 100%; }
+
+.eyebrow {
+  display: flex; align-items: center; gap: var(--space-3);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.eyebrow::after {
+  content: ''; flex: 1 1 auto; height: var(--border-width-thin); background: var(--border-subtle);
+}
+.eyebrow .num { color: var(--text-brand); }
+
+.lede { font-size: var(--font-size-md); color: var(--text-secondary); max-width: 62ch; }
+.lede--wide { max-width: none; }
+
+.body {
+  flex: 1 1 auto; min-height: 0;
+  display: flex; flex-direction: column; gap: var(--space-5);
+  /* `safe` so that content taller than the space left never bleeds upward
+     over the heading — it just starts at the top instead. */
+  justify-content: safe center;
+}
+.body--top { justify-content: flex-start; }
+
+.note {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  color: var(--text-muted);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* --- title -------------------------------------------------------------- */
+
+.title { display: flex; flex-direction: column; justify-content: center; gap: var(--space-6); height: 100%; }
+.title h1 { font-size: var(--font-size-4xl); max-width: 20ch; }
+.title .claim { font-size: var(--font-size-lg); color: var(--text-brand); max-width: 46ch; line-height: var(--line-height-snug); }
+.title .meta { display: flex; gap: var(--space-6); }
+
+/* --- metric grid -------------------------------------------------------- */
+
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); }
+.metric {
+  padding: var(--space-4);
+  background: var(--surface-raised);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.metric .n {
+  font-family: var(--type-display-md-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  color: var(--text-brand);
+}
+.metric .n--warn { color: var(--text-accent); }
+.metric .k { font-size: var(--font-size-2xs); color: var(--text-secondary); line-height: var(--line-height-snug); }
+.metric .src { font-family: var(--font-family-mono); font-size: var(--font-size-3xs); color: var(--text-muted); }
+
+/* --- cards / columns ---------------------------------------------------- */
+
+.cols { display: grid; gap: var(--space-5); align-items: start; }
+.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cols-2-1 { grid-template-columns: 2fr 1fr; }
+.cols-1-1 { grid-template-columns: 1fr 1fr; }
+
+.card {
+  padding: var(--space-4);
+  background: var(--surface-raised);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  display: flex; flex-direction: column; gap: var(--space-3);
+}
+.card--accent { border-color: var(--border-brand); }
+.card h3 { font-size: var(--font-size-md); }
+.card p  { font-size: var(--font-size-2xs); }
+
+.tag {
+  align-self: flex-start;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-brand-subtle);
+  color: var(--surface-brand-subtle-fg);
+}
+.tag--warn { background: var(--status-warning-bg); color: var(--status-warning-fg); }
+.tag--bad  { background: var(--status-danger-bg);  color: var(--status-danger-fg); }
+.tag--ok   { background: var(--status-success-bg); color: var(--status-success-fg); }
+
+/* --- rules list --------------------------------------------------------- */
+
+/* The list form, for the tables that have no column headings. Scoped to `ul`
+   so it cannot turn a real <table class="rules"> into a flex container. */
+ul.rules { display: flex; flex-direction: column; }
+ul.rules li {
+  display: grid; grid-template-columns: 12ch 1fr 1fr; gap: var(--space-4);
+  padding-block: var(--space-3);
+  border-block-start: var(--border-width-thin) solid var(--border-subtle);
+  font-size: var(--font-size-2xs);
+  align-items: baseline;
+}
+ul.rules li:last-child { border-block-end: var(--border-width-thin) solid var(--border-subtle); }
+.rules .who { font-family: var(--font-family-mono); color: var(--text-brand); text-transform: uppercase; letter-spacing: var(--letter-spacing-wide); font-size: var(--font-size-3xs); }
+.rules .owns { color: var(--text-primary); }
+.rules .instead { color: var(--text-muted); }
+
+/* Variants of the list form. Written as `ul.rules--two` and not `.rules--two`
+   because `ul.rules li` above is one class heavier: a bare `.rules--two li`
+   loses the specificity contest and the variant does nothing at all, silently
+   and while looking correct in the stylesheet. Two slides were rendering with
+   the wrong columns for exactly this reason. */
+ul.rules--two li { grid-template-columns: 34ch 1fr; }
+.rules--two .owns { color: var(--text-primary); }
+ul.rules--wide li { grid-template-columns: 46ch 14ch 1fr; }
+
+/* A real table wherever there are column headings. The header and the rows
+   have to agree on column widths, and they cannot when each is its own grid:
+   `ch` is font-relative, and the header is mono while the rows are not, so
+   `12ch` means two different widths. One table computes one set of widths. */
+table.rules {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+table.rules th {
+  text-align: start;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-wider);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-block-end: var(--space-3);
+  padding-inline-end: var(--space-4);
+}
+table.rules td {
+  padding-block: var(--space-3);
+  padding-inline-end: var(--space-4);
+  border-block-start: var(--border-width-thin) solid var(--border-subtle);
+  font-size: var(--font-size-2xs);
+  vertical-align: baseline;
+}
+table.rules tr:last-child td { border-block-end: var(--border-width-thin) solid var(--border-subtle); }
+
+/* Percentages, not `ch`, so a brand with a wider font cannot shift a column. */
+.rules--four th:nth-child(1), .rules--four td:nth-child(1) { width: 11%; }
+.rules--four th:nth-child(2), .rules--four td:nth-child(2) { width: 34%; }
+.rules--four th:nth-child(3), .rules--four td:nth-child(3) { width: 16%; }
+.rules--brands th:nth-child(1), .rules--brands td:nth-child(1) { width: 10%; }
+.rules--brands th:nth-child(2), .rules--brands td:nth-child(2) { width: 30%; }
+.rules--brands th:nth-child(4), .rules--brands td:nth-child(4) { width: 16%; }
+.rules--homes th:nth-child(1), .rules--homes td:nth-child(1) { width: 12%; }
+.rules--homes th:nth-child(2), .rules--homes td:nth-child(2) { width: 30%; }
+.rules--homes th:nth-child(3), .rules--homes td:nth-child(3) { width: 12%; }
+.rules--brands th:nth-child(1), .rules--brands td:nth-child(1) { width: 10%; }
+.rules--brands th:nth-child(2), .rules--brands td:nth-child(2) { width: 30%; }
+.rules--brands th:nth-child(4), .rules--brands td:nth-child(4) { width: 16%; }
+.rules--homes th:nth-child(1), .rules--homes td:nth-child(1) { width: 12%; }
+.rules--homes th:nth-child(2), .rules--homes td:nth-child(2) { width: 30%; }
+.rules--homes th:nth-child(3), .rules--homes td:nth-child(3) { width: 11%; }
+.rules--dials th:nth-child(1), .rules--dials td:nth-child(1) { width: 30%; }
+/* A numbered list of jobs beside a code sample: a narrow rail, then the job. */
+.rules--two-col th:nth-child(1), .rules--two-col td:nth-child(1) { width: 8%; }
+.rules--dials th:nth-child(2), .rules--dials td:nth-child(2) { width: 16%; }
+.rules--dials th:nth-child(1), .rules--dials td:nth-child(1) { width: 30%; }
+/* A numbered list of jobs beside a code sample: a narrow rail, then the job. */
+.rules--two-col th:nth-child(1), .rules--two-col td:nth-child(1) { width: 8%; }
+.rules--dials th:nth-child(2), .rules--dials td:nth-child(2) { width: 16%; }
+.rules--found th:nth-child(1), .rules--found td:nth-child(1) { width: 11%; }
+.rules--found th:nth-child(2), .rules--found td:nth-child(2) { width: 51%; }
+.rules--goal th:nth-child(1), .rules--goal td:nth-child(1) { width: 12%; }
+.rules--goal th:nth-child(2), .rules--goal td:nth-child(2) { width: 44%; }
+/* File paths in the first column need room; "Used in" holds two words. */
+.rules--files th:nth-child(1), .rules--files td:nth-child(1) { width: 19%; }
+.rules--files th:nth-child(2), .rules--files td:nth-child(2) { width: 42%; }
+.rules--files th:nth-child(3), .rules--files td:nth-child(3) { width: 14%; }
+.rules--files th:nth-child(4), .rules--files td:nth-child(4) { width: 10%; }
+/* The four jobs are named in sentences, not single words, so the first
+   column carries as much text as the second. */
+.rules--jobs th:nth-child(1), .rules--jobs td:nth-child(1) { width: 24%; }
+.rules--jobs th:nth-child(2), .rules--jobs td:nth-child(2) { width: 28%; }
+.rules--jobs th:nth-child(3), .rules--jobs td:nth-child(3) { width: 13%; }
+/* Same table as rules--found, but the first column holds a phrase. */
+.rules--jobs3 th:nth-child(1), .rules--jobs3 td:nth-child(1) { width: 17%; }
+.rules--jobs3 th:nth-child(2), .rules--jobs3 td:nth-child(2) { width: 44%; }
+
+.rules .varies {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* --- code --------------------------------------------------------------- */
+
+.reveal pre {
+  width: 100%; margin: 0; box-shadow: none;
+  background: var(--surface-raised);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  font-size: var(--font-size-3xs);
+}
+.reveal pre code {
+  /* code is inline by default, and an inline box only pads its first line. */
+  display: block;
+  padding: var(--space-4);
+  font-family: var(--font-family-mono);
+  line-height: var(--line-height-relaxed);
+  max-height: none;
+  color: var(--text-secondary);
+  background: transparent;
+}
+.reveal pre code .c { color: var(--text-muted); }         /* comment */
+.reveal pre code .k { color: var(--text-brand); }          /* keyword / api */
+.reveal pre code .s { color: var(--text-accent); }         /* string */
+.reveal pre code .h { color: var(--text-primary); font-weight: var(--font-weight-semibold); }
+.reveal pre code .x { color: var(--status-danger-fg); }    /* the wrong way */
+
+.codelabel {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-block-end: var(--space-2);
+}
+
+/* --- figures ------------------------------------------------------------ */
+
+figure { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; }
+/* Capped so a slide cannot grow past the stage when a brand's font is wider
+   and captions wrap onto another line. The diagram shrinks; nothing spills. */
+figure svg { width: 100%; height: auto; max-height: 420px; display: block; }
+figcaption { font-size: var(--font-size-2xs); color: var(--text-muted); }
+
+/* --- tenant switcher ---------------------------------------------------- */
+
+.switcher { display: flex; gap: var(--space-2); }
+.switcher button {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--control-tracking);
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--control-radius);
+  border: var(--border-width-thin) solid var(--border-default);
+  background: var(--surface-raised);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.switcher button[aria-pressed='true'] {
+  background: var(--surface-brand); color: var(--surface-brand-fg); border-color: var(--surface-brand);
+}
+
+/* --- footer ------------------------------------------------------------- */
+
+.deck-footer {
+  /* Left rail only — reveal owns the bottom-right corner for controls and
+     the slide counter. */
+  position: fixed; inset-inline-start: var(--space-6); inset-block-end: var(--space-4);
+  display: flex;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  color: var(--text-muted);
+  z-index: var(--z-sticky);
+  pointer-events: none;
+}
+
+.reveal .progress { color: var(--surface-brand); height: var(--border-width-thick); }
+.reveal .controls { color: var(--text-muted); }
+
+/* With vertical stacks the controls become a diamond, which reaches further
+   into the corner than the old left/right pair did. Move the counter clear of
+   it rather than shrinking the controls. */
+.reveal .slide-number {
+  inset-block-end: auto; inset-block-start: var(--space-4);
+  inset-inline-end: var(--space-6);
+  background: none;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--text-muted);
+}
+
+/* --- diagram vocabulary -------------------------------------------------
+   One visual language for every SVG: hairline strokes, token colours, mono
+   labels. Diagrams inherit the theme, so they retheme with the tenant too. */
+
+svg text { font-family: var(--font-family-body); fill: var(--text-primary); }
+svg .t-mono   { font-family: var(--font-family-mono); letter-spacing: 0.06em; }
+svg .t-label  { font-size: 13px; }
+svg .t-small  { font-size: 11px; }
+svg .t-tiny   { font-size: 9.5px; }
+svg .t-lead   { font-size: 15px; font-weight: 600; }
+svg .t-muted  { fill: var(--text-muted); }
+svg .t-second { fill: var(--text-secondary); }
+svg .t-brand  { fill: var(--text-brand); }
+svg .t-accent { fill: var(--text-accent); }
+svg .t-onfill { fill: var(--surface-brand-fg); }
+svg .t-bad    { fill: var(--status-danger-fg); }
+
+svg .box      { fill: var(--surface-raised); stroke: var(--border-default); stroke-width: 1; }
+svg .box-sub  { fill: var(--surface-sunken); stroke: var(--border-subtle); stroke-width: 1; }
+svg .box-brand{ fill: var(--surface-brand-subtle); stroke: var(--border-brand); stroke-width: 1; }
+svg .box-fill { fill: var(--surface-brand); stroke: none; }
+svg .box-bad  { fill: var(--status-danger-bg); stroke: var(--status-danger-border); stroke-width: 1; }
+svg .box-warn { fill: var(--status-warning-bg); stroke: var(--status-warning-border); stroke-width: 1; }
+svg .box-ghost{ fill: none; stroke: var(--border-subtle); stroke-width: 1; stroke-dasharray: 3 4; }
+/* Outline only. A class is needed rather than fill="none" on the element,
+   because a CSS declaration beats a presentation attribute. */
+svg .box-outline{ fill: none; stroke: var(--surface-brand); stroke-width: 2; }
+
+svg .link      { stroke: var(--border-strong); stroke-width: 1.25; fill: none; }
+svg .link-brand{ stroke: var(--surface-brand); stroke-width: 1.5; fill: none; }
+svg .link-soft { stroke: var(--border-subtle); stroke-width: 1; fill: none; }
+svg .link-bad  { stroke: var(--status-danger-border); stroke-width: 1.25; fill: none; }
+svg .rule      { stroke: var(--border-subtle); stroke-width: 1; }
+
+/* --- the footer brand picker -------------------------------------------
+   Always on screen, because a live specimen is only interesting next to the
+   same specimen in another brand. */
+.deck-footer { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); }
+#brands { display: flex; gap: var(--space-1); }
+#brands button {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+#brands button[aria-pressed='true'] {
+  border-color: var(--border-brand);
+  color: var(--text-brand);
+}
+
+/* A live component sits on the page it would sit on, not in a frame. The
+   stage only stops a card from stretching to the full 1280. */
+.stage { display: flex; flex-direction: column; gap: var(--space-4); max-width: 68ch; }
+.stage--wide { max-width: none; }
+
+/* --- the live event log ---------------------------------------------------
+   The card in the analytics chapter writes into the same log the dev panel
+   reads. Given a height so a burst of events scrolls instead of pushing the
+   slide off the bottom. */
+.loglive {
+  max-height: 15rem;
+  overflow-y: auto;
+  border-block-start: var(--border-width-thin) solid var(--border-subtle);
+  padding-block-start: var(--space-3);
+}
+.clearlog {
+  align-self: flex-start;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-3xs);
+  letter-spacing: var(--letter-spacing-wide);
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-2);
+  border: var(--border-width-thin) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}

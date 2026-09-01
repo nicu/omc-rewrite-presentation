@@ -1,0 +1,49 @@
+/* ============================================================================
+   BRAND · HALO
+   Glass needs something behind it. The page is lit here rather than in the MUI
+   theme, because a background image is a page decision and MUI only publishes
+   a flat colour.
+   ========================================================================= */
+
+:root[data-brand='halo'] {
+  --space-unit:          5px;
+  --radius-unit:         5px;
+  --font-size-base:      15px;
+  --font-family-display: 'Outfit', system-ui, sans-serif;
+  --font-family-body:    'Inter', system-ui, sans-serif;
+  --control-tracking:    var(--letter-spacing-normal);
+  --control-transform:   none;
+  --control-font-weight: var(--font-weight-semibold);
+
+  --motion-distance-sm:   12px;
+  --motion-distance-md:   24px;
+  --motion-distance-lg:   44px;
+  --duration-fast:       260ms;
+  --duration-normal:     520ms;
+  --duration-slow:       780ms;
+  --motion-stagger:       80ms;
+
+  /* The whole point of this brand: surfaces blur whatever scrolls under them. */
+  --surface-blur: blur(24px) saturate(180%);
+
+  /* Blur softens what is behind; it does not create contrast. A 7% white tint
+     over a light photograph leaves light text unreadable, so the material
+     carries a dark scrim of its own — enough that the text is legible whatever
+     scrolls under it. This is why real glass UI is tinted, not just blurred. */
+  --surface-glass-scrim: rgba(10, 13, 24, 0.62);
+}
+
+:root[data-brand='halo'] body {
+  background-color: #05060a;
+  background-image:
+    radial-gradient(60rem 40rem at 12% -10%, rgba(122, 162, 255, 0.35), transparent 60%),
+    radial-gradient(50rem 36rem at 88% 8%,  rgba(201, 167, 255, 0.28), transparent 62%),
+    radial-gradient(46rem 34rem at 50% 108%, rgba(94, 234, 212, 0.20), transparent 60%);
+  background-attachment: fixed;
+}
+
+/* The price sits at the top of the row, level with the name, the way a figure
+   is quoted next to what it is for. */
+:root[data-brand='halo'] {
+  --list-aside-align: start;
+}

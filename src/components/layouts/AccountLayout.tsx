@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import styles from './AccountLayout.module.css';
 
 export const AccountLayout = ({ summary, nav, children }: {
-  /** The tenant-varying part: earn & burn shows balances, cash shows nothing. */
+  /** The brand-varying part: earn & burn shows balances, cash shows nothing. */
   summary?: ReactNode; nav: ReactNode; children: ReactNode;
 }) => (
   <div className={styles.layout}>

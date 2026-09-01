@@ -12,7 +12,11 @@ export type Adapter = { name: string; send: (e: TelemetryEvent) => void };
 
 /** Ambient dimensions every destination gets, merged once, here. */
 const dimensions = ({ context }: TelemetryEvent) => ({
-  tenant: context.tenant,
+  /* The one place the old word survives. Every dashboard, funnel and saved
+     query downstream is keyed on `tenant`; renaming it here would make this
+     rewrite a reporting migration as well. Our code says brand, the wire says
+     tenant. */
+  tenant: context.brand,
   partner: context.partner,
   brandKey: context.brandKey,
   businessModel: context.businessModel,

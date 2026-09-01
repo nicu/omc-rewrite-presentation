@@ -5,7 +5,7 @@
    type, so the switch is exhaustive and TypeScript proves nothing is missed.
    ========================================================================= */
 
-import { Badge, Stack, Text } from '../atoms';
+import { Badge, Stack, Text } from '../primitives';
 import type { Price } from '../../data/model';
 import styles from './PriceDisplay.module.css';
 

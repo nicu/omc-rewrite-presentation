@@ -1,0 +1,31 @@
+/* ============================================================================
+   BRAND · ATLAS
+   Colour, radius and type now come from this brand's MUI theme, which emits
+   --mui-* variables. What is left here is the handful of values our own
+   layout stylesheets need and MUI does not publish.
+   ========================================================================= */
+
+:root[data-brand='atlas'] {
+  --space-unit:          4px;
+  --radius-unit:         2px;
+  --font-size-base:      15px;
+  --font-family-display: 'Playfair Display', Georgia, serif;
+  --font-family-body:    'Inter', system-ui, sans-serif;
+  --control-tracking:    var(--letter-spacing-wide);
+  --control-transform:   uppercase;
+  --control-font-weight: var(--font-weight-semibold);
+}
+
+/* Motion. This brand is the one we demonstrate with: a long, generous travel
+   and a slow settle, so the entrance is easy to see from the back of a room.
+   Nothing here is a component's business — the pages ask for `md` or `lg` and
+   get whatever this brand means by it. */
+:root[data-brand='atlas'] {
+  --motion-distance-sm:   24px;
+  --motion-distance-md:   48px;
+  --motion-distance-lg:   80px;
+  --duration-fast:       420ms;
+  --duration-normal:     700ms;
+  --duration-slow:       900ms;
+  --motion-stagger:      120ms;
+}

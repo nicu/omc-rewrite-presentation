@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import styles from './SplitLayout.module.css';
 
-/** Used by sign-in. Tenants move the media slot; no new component. */
+/** Used by sign-in. Brands move the media slot; no new component. */
 export const SplitLayout = ({ media, mediaOverlay, children, mediaSide = 'left' }: {
   media?: ReactNode;
   mediaOverlay?: ReactNode;

@@ -1,14 +1,20 @@
 /* One row in a list. Used by stays results, flights results and past trips —
    three different verticals and two different pages, one file. */
 
-.item { display: grid; align-items: stretch; min-width: 0; }
-.withMedia    { grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto; }
-.withoutMedia { grid-template-columns: minmax(0, 1fr) auto; }
+.item { display: grid; align-items: stretch; min-width: 0; --aside-track: var(--list-aside-width); }
+/* No aside, no column. Kept as a variable so the two shapes below stay single
+   rules and the mobile override does not have to out-specify a modifier. */
+.noAside { --aside-track: 0px; }
+
+.withMedia    { grid-template-columns: minmax(0, 260px) minmax(0, 1fr) var(--aside-track); }
+.withoutMedia { grid-template-columns: minmax(0, 1fr) var(--aside-track); }
 
 .body { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--card-padding); min-width: 0; }
 
 .aside {
-  display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
+  display: flex; flex-direction: column; align-items: flex-end;
+  /* Top, middle or bottom of the row — a brand sets this, the row does not. */
+  justify-content: var(--list-aside-align);
   gap: var(--space-3);
   padding: var(--card-padding);
   border-inline-start: var(--border-width-thin) solid var(--border-subtle);

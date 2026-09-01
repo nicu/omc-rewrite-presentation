@@ -18,6 +18,9 @@ const validation: Record<string, string> = {
   REQUIRED: 'This field is required',
   EMAIL_FORMAT: 'Enter a valid email address',
   PASSWORD_SHORT: 'Use at least 8 characters',
+  DATE_INVALID: 'Enter a date as YYYY-MM-DD',
+  DATE_FUTURE: 'This date is in the future',
+  ADULT_REQUIRED: 'The lead traveller must be 18 or over',
 };
 
 export const failureMessage = (failure: Failure): string => {

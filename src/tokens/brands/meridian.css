@@ -1,0 +1,30 @@
+/* ============================================================================
+   BRAND · MERIDIAN
+   Colour, radius and type now come from this brand's MUI theme, which emits
+   --mui-* variables. What is left here is the handful of values our own
+   layout stylesheets need and MUI does not publish.
+   ========================================================================= */
+
+:root[data-brand='meridian'] {
+  --space-unit:          5px;
+  --radius-unit:         8px;
+  --font-size-base:      16px;
+  --font-family-display: 'Outfit', system-ui, sans-serif;
+  --font-family-body:    'Outfit', system-ui, sans-serif;
+  --control-transform:   none;
+  --control-font-weight: var(--font-weight-medium);
+  --card-padding:        var(--space-6);
+  --page-gutter:         var(--space-6);
+}
+
+/* Motion. Quick and close: this brand acknowledges an arrival rather than
+   performing one. Same steps, retuned — no page changed which one it asks for. */
+:root[data-brand='meridian'] {
+  --motion-distance-sm:    8px;
+  --motion-distance-md:   14px;
+  --motion-distance-lg:   22px;
+  --duration-fast:       180ms;
+  --duration-normal:     260ms;
+  --duration-slow:       340ms;
+  --motion-stagger:       55ms;
+}

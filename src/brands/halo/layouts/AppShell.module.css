@@ -1,0 +1,58 @@
+/* Content runs the full height of the window; the chrome floats over it, so
+   whatever is underneath is what the glass is blurring. That is the whole
+   reason this brand has a shell of its own. */
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+
+.floating {
+  position: fixed;
+  inset-block-start: var(--space-4);
+  inset-inline: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+.floating > * { pointer-events: auto; }
+
+/* The pill. Rounded to its own height, blurred, and lit along the top edge
+   the way a real piece of glass catches light. */
+.pill {
+  border-radius: var(--radius-full);
+  border: var(--border-width-thin) solid rgba(255, 255, 255, 0.16);
+  background: var(--surface-glass-scrim);
+  backdrop-filter: var(--surface-blur);
+  -webkit-backdrop-filter: var(--surface-blur);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  /* A pill needs more inline padding than a bar does. The rounded end eats
+     the first several pixels, so a gutter that looks generous on a rectangle
+     leaves the logo and the last button sitting in the curve. */
+  padding-inline: var(--space-6);
+  max-width: calc(100% - var(--space-6) * 2);
+}
+
+/* The header inside is a Surface, and a Surface blurs in this brand. Two panes
+   of glass stacked do not blur twice — the inner rectangle paints over the
+   rounded ends and they come out sharp. So inside the pill, the surface is
+   transparent and does not blur; the pill is the only glass here. */
+.pill > * {
+  --surface-raised: transparent;
+  --surface-blur: none;
+  /* The header inside is a normal page header, so it brings the page gutter
+     with it. A pill is not a page: it has its own padding, and the gutter on
+     top of it pushed the controls in from the rounded edge. Switched off with
+     the token rather than by reaching into the Container's class. */
+  --page-gutter: 0px;
+
+  /* It brings its own bottom rule too, for the same reason: a bar across the
+     page needs a line separating it from the page. A pill has an edge of its
+     own all the way round, so the rule had nothing to separate — it just drew
+     a hairline across the inside, stopping short of the rounded ends. The menu
+     items use this token as well, but they render in a dialog outside the
+     pill, so switching it off here reaches only the bar. */
+  --border-subtle: transparent;
+}
+
+/* Nothing sits behind the floating bar, so the page starts below it. */
+.main { flex: 1 1 auto; padding-block-start: var(--space-8); overflow-x: clip; }
+
+.footer { margin-block-start: var(--space-8); }

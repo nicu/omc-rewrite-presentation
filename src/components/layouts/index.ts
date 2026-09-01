@@ -1,9 +1,14 @@
 export { AppShell, Container, Section, Grid } from './PageLayout';
+export type { AppShellProps } from './PageLayout';
 export { ListItemLayout } from './ListItemLayout';
 export type { ListItemLayoutProps } from './ListItemLayout';
 export { SearchLayout } from './SearchLayout';
 export type { SearchLayoutProps } from './SearchLayout';
 export { SearchLayoutCompound, useHasFilters } from './SearchLayoutCompound';
+export { WizardLayout, WizardSteps } from './WizardLayout';
+export type { WizardLayoutProps } from './WizardLayout';
 export { SplitLayout } from './SplitLayout';
+export { SplitSignIn, CanvasSignIn } from './SignInLayouts';
+export type { SignInLayoutProps } from './SignInLayouts';
 export { AccountLayout } from './AccountLayout';
 export { HeroLayout } from './HeroLayout';

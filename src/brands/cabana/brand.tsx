@@ -1,9 +1,10 @@
-import { SelectChoice } from '../../components/atoms';
+import { SelectChoice } from '../../components/primitives';
 import { img } from '../../data/mock/imagery';
-import { OverviewSection, TripsSection, WalletSection } from '../../regions/account';
+import { OVERVIEW, TRIPS, WALLET } from '../../regions/account';
 import { theme } from './theme';
 import type { BrandConfig } from '../types';
-import { FooterNote } from './slots';
+import { SearchLayout } from './layouts/SearchLayout';
+import { FooterNote } from './presenters/slots';
 
 /**
  * Cash retail. No loyalty programme, so no membership banner and no sign-in
@@ -24,10 +25,14 @@ export const cabana: BrandConfig = {
   defaultBusinessModel: 'cash',
 
   accountSections: [
-    { id: 'overview', label: 'Overview', Panel: OverviewSection },
-    { id: 'bookings', label: 'My trips', Panel: TripsSection },
-    { id: 'wallet', label: 'Cards', Panel: WalletSection },
+    { ...OVERVIEW, label: 'Overview' },
+    { ...TRIPS, label: 'My trips' },
+    { ...WALLET, label: 'Cards' },
   ],
 
-  overrides: { PaymentChoice: SelectChoice, FooterNote },
+  overrides: {
+    checkout: { PaymentChoice: SelectChoice },
+    chrome:   { FooterNote },
+    search:   { Layout: SearchLayout },
+  },
 };

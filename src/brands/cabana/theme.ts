@@ -17,4 +17,5 @@ export const tokens: BrandTokens = {
   fontSize: 15,
 };
 
+/* No `animates`: this brand does not animate. Nothing else has to know. */
 export const theme = buildTheme(tokens);

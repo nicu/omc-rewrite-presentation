@@ -1,0 +1,21 @@
+/* The row shape now lives in ListItemLayout. What is left is specific to a
+   hotel: the amenity chips and the policy link. */
+
+.amenities { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.amenity {
+  font-size: var(--font-size-2xs);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+/* They cycle. Every tint is the same grey unless a brand redefines them, so
+   this is invisible everywhere except the brand that asked for it. */
+.amenity:nth-child(4n + 1) { background: var(--tag-tint-1); color: var(--tag-ink-1); }
+.amenity:nth-child(4n + 2) { background: var(--tag-tint-2); color: var(--tag-ink-2); }
+.amenity:nth-child(4n + 3) { background: var(--tag-tint-3); color: var(--tag-ink-3); }
+.amenity:nth-child(4n + 4) { background: var(--tag-tint-4); color: var(--tag-ink-4); }
+.infoButton {
+  font-size: var(--font-size-2xs);
+  color: var(--text-link);
+  text-decoration: underline;
+  align-self: flex-start;
+}

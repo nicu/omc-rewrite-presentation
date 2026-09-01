@@ -1,7 +1,7 @@
 /* Sections compose. This one is two other sections, each still loading its
    own data — which is why they arrive together rather than one after another. */
 
-import { Stack, Text } from '../../components/atoms';
+import { Stack, Text } from '../../components/primitives';
 import { Section } from '../../components/layouts';
 import { TripsSection } from './TripsSection';
 import { WalletSection } from './WalletSection';

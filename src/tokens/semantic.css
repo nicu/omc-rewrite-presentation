@@ -76,7 +76,7 @@
   --status-info-border: var(--mui-palette-info-main);
 
   /* --- elevation --------------------------------------------------------
-     Named by intent, not by blur radius. Tenants remap the geometry.      */
+     Named by intent, not by blur radius. Brands remap the geometry.      */
   --elevation-flat:    none;
   --elevation-raised:  var(--shadow-1);
   --elevation-card:    var(--shadow-2);
@@ -155,6 +155,14 @@
   --card-border-width: var(--border-width-none);
   --card-border-color: var(--border-subtle);
   --card-elevation:    var(--elevation-card);
+
+  /* --- list row ---------------------------------------------------------
+     The right-hand column of a row — the price, the status, the button. It is
+     a fixed width rather than a shrink-to-fit one so that every row in a list
+     breaks at the same place: "$412" and "$1,240" must not move the column.
+     Where the aside sits inside that column is a brand's decision. */
+  --list-aside-width: 12rem;
+  --list-aside-align: center;   /* start | center | end */
 
   /* --- field ------------------------------------------------------------ */
   --field-surface:      var(--surface-raised);

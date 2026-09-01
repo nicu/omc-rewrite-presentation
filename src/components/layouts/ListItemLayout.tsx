@@ -9,7 +9,7 @@
 
 import type { ReactNode, Ref } from 'react';
 
-import { Card } from '../atoms';
+import { Card } from '../primitives';
 import styles from './ListItemLayout.module.css';
 
 export type ListItemLayoutProps = {
@@ -27,7 +27,11 @@ export type ListItemLayoutProps = {
 
 export const ListItemLayout = ({ media, body, aside, onClick, ariaLabel, ref }: ListItemLayoutProps) => (
   <Card ref={ref} onClick={onClick} ariaLabel={ariaLabel}>
-    <div className={[styles.item, media ? styles.withMedia : styles.withoutMedia].join(' ')}>
+    <div className={[
+      styles.item,
+      media ? styles.withMedia : styles.withoutMedia,
+      aside ? '' : styles.noAside,
+    ].filter(Boolean).join(' ')}>
       {media}
       <div className={styles.body}>{body}</div>
       {aside && (

@@ -1,5 +1,12 @@
 .shell { min-height: 100vh; display: flex; flex-direction: column; background: var(--surface-page); }
-.main  { flex: 1 1 auto; }
+/* Motion that travels sideways waits off to one side: something entering from
+   the right sits translated right until it is revealed. Below the fold on a
+   narrow screen nothing has revealed it yet, so that offset became real page
+   width and the whole site gained a horizontal scrollbar into empty space.
+
+   `clip` rather than `hidden`: it does not make this a scroll container, so
+   the sticky header outside it keeps working. */
+.main  { flex: 1 1 auto; overflow-x: clip; }
 
 .container { width: 100%; max-width: var(--page-max-width); margin-inline: auto; padding-inline: var(--page-gutter); }
 .narrow    { max-width: var(--container-md); }

@@ -1,12 +1,12 @@
 /* ============================================================================
    PRIMITIVE TOKENS  ·  layer 1
    Raw scales. Never referenced by a component — only by semantic.css and by
-   tenant files. If a component uses one of these directly, that's a bug.
+   brand files. If a component uses one of these directly, that's a bug.
    ========================================================================= */
 
 :root {
   /* --- spacing ----------------------------------------------------------
-     4px base. Tenants scale --space-unit to change global density.        */
+     4px base. Brands scale --space-unit to change global density.        */
   --space-unit: 4px;
   --space-0:  0;
   --space-1:  calc(var(--space-unit) * 1);   /*  4 */
@@ -20,7 +20,7 @@
   --space-9:  calc(var(--space-unit) * 24);  /* 96 */
 
   /* --- type scale -------------------------------------------------------
-     1.200 minor third from 16px. Tenants override --font-size-base.       */
+     1.200 minor third from 16px. Brands override --font-size-base.       */
   --font-size-base: 16px;
   --font-size-3xs: calc(var(--font-size-base) * 0.625);  /* 10 */
   --font-size-2xs: calc(var(--font-size-base) * 0.75);   /* 12 */
@@ -49,7 +49,7 @@
   --letter-spacing-wider:   0.12em;
 
   /* --- radius -----------------------------------------------------------
-     Tenants override --radius-unit for their whole corner personality.    */
+     Brands override --radius-unit for their whole corner personality.    */
   --radius-unit: 4px;
   --radius-none: 0;
   --radius-sm:   calc(var(--radius-unit) * 0.5);
@@ -66,7 +66,7 @@
   --border-width-heavy: 4px;
 
   /* --- neutral ramp -----------------------------------------------------
-     Tenants override the whole ramp — it is never truly grey.             */
+     Brands override the whole ramp — it is never truly grey.             */
   --color-neutral-0:    #ffffff;
   --color-neutral-50:   #f8f9fa;
   --color-neutral-100:  #f1f3f5;
@@ -80,7 +80,7 @@
   --color-neutral-900:  #212529;
   --color-neutral-1000: #0b0d0e;
 
-  /* --- brand + accent ramps (tenant-owned; these are fallbacks) --------- */
+  /* --- brand + accent ramps (brand-owned; these are fallbacks) --------- */
   --color-brand-50:   #eef2ff;
   --color-brand-100:  #e0e7ff;
   --color-brand-200:  #c7d2fe;
@@ -97,14 +97,14 @@
   --color-accent-600: #ea580c;
   --color-accent-900: #7c2d12;
 
-  /* --- status ramps (shared across tenants; hue is semantic, not brand) - */
+  /* --- status ramps (shared across brands; hue is semantic, not brand) - */
   --color-success-50:  #ecfdf5;  --color-success-500: #10b981;  --color-success-700: #047857;
   --color-warning-50:  #fffbeb;  --color-warning-500: #f59e0b;  --color-warning-700: #b45309;
   --color-danger-50:   #fef2f2;  --color-danger-500:  #ef4444;  --color-danger-700:  #b91c1c;
   --color-info-50:     #eff6ff;  --color-info-500:    #3b82f6;  --color-info-700:    #1d4ed8;
 
   /* --- shadow ----------------------------------------------------------
-     Split into colour + geometry so a tenant can restyle either alone.
+     Split into colour + geometry so a brand can restyle either alone.
      Cabana sets every --shadow-* to `none` and leans on borders instead.  */
   --shadow-color: 220 12% 12%;
   --shadow-strength: 0.10;
@@ -123,8 +123,40 @@
   --duration-normal:  220ms;
   --duration-slow:    360ms;
   --easing-standard:  cubic-bezier(0.2, 0, 0, 1);
-  --easing-entrance:  cubic-bezier(0, 0, 0, 1);
+  /* Was cubic-bezier(0, 0, 0, 1), which spends half its progress in the first
+     frame — at any short duration that reads as a jump rather than a fade.
+     This one eases out firmly but stays legible down to about 200ms. */
+  --easing-entrance:  cubic-bezier(0.33, 1, 0.68, 1);
   --easing-exit:      cubic-bezier(0.3, 0, 1, 1);
+  /* How far something travels as it arrives, and how long a list waits
+     between its items. A brand retunes these where it retunes --space-unit. */
+  --motion-distance-sm:  8px;
+  --motion-distance-md: 16px;
+  --motion-distance-lg: 32px;
+  --motion-stagger:     60ms;
+
+  /* --- surface treatment ------------------------------------------------
+     Off by default. A brand that wants glass turns it on in its brand file;
+     no component is told, because Surface reads the token like it reads a
+     colour. */
+  --surface-blur: none;
+  /* A dark backing for translucent surfaces. Transparent by default: only a
+     brand whose surfaces are glass needs one, and only because blur alone
+     cannot create contrast against a light photograph. */
+  --surface-glass-scrim: transparent;
+
+  /* --- result tags ------------------------------------------------------
+     The little chips on a result card. Four tints that all default to the
+     same quiet grey, so a brand that says nothing gets what it has today and
+     a brand that wants a colourful shelf sets four values. */
+  --tag-tint-1: var(--surface-sunken);
+  --tag-tint-2: var(--surface-sunken);
+  --tag-tint-3: var(--surface-sunken);
+  --tag-tint-4: var(--surface-sunken);
+  --tag-ink-1:  var(--text-secondary);
+  --tag-ink-2:  var(--text-secondary);
+  --tag-ink-3:  var(--text-secondary);
+  --tag-ink-4:  var(--text-secondary);
 
   /* --- z-index ---------------------------------------------------------- */
   --z-base:    0;
@@ -140,7 +172,7 @@
   --container-lg:  1160px;
   --container-xl:  1400px;
 
-  /* --- fonts (tenant-owned; fallbacks only) ----------------------------- */
+  /* --- fonts (brand-owned; fallbacks only) ----------------------------- */
   --font-family-display: ui-sans-serif, system-ui, sans-serif;
   --font-family-body:    ui-sans-serif, system-ui, sans-serif;
   --font-family-mono:    ui-monospace, SFMono-Regular, monospace;

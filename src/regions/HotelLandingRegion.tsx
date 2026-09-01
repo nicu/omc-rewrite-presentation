@@ -1,151 +1,76 @@
 /* ============================================================================
    HOTEL LANDING  ·  region
-   Three resources, one boundary, one guard. The region names itself once
-   ("hotel.landing") and that name becomes the telemetry region for every
-   event emitted below it — including the load failure, which is reported
-   automatically without a single trackEvent call here.
+   It loads three things and renders a list of sections. Which sections, and in
+   what order, is the brand's — the same arrangement the checkout uses for its
+   steps, and for the same reason: a page was a fixed run of JSX, so a brand
+   that wanted a different one had to fork the whole region.
+
+   This file has no idea what any section contains.
    ========================================================================= */
 
-import { Button, Stack, Text } from "../components/atoms";
-import { Container, Grid, HeroLayout, Section } from "../components/layouts";
-import {
-  DestinationCard,
-  FailurePanel,
-  HotelResultCard,
-  LandingSkeleton,
-  PromoBanner,
-  SearchBar,
-} from "../components/presenters";
-import {
-  destinationsQuery,
-  featuredHotelsQuery,
-  promosQuery,
-} from "../data/queries";
-import { useLoad } from "../data/useLoad";
-import { failureMessage } from "../errors/messages";
-import { useTenant } from "../app/tenant";
-import { hasLoyalty } from "../brands";
-import { useRouter } from "../app/router";
+import { Container } from '../components/layouts';
+import type { LandingSection } from './landing/sections';
+import { FailurePanel, LandingSkeleton } from '../components/presenters';
+import { destinationsQuery, featuredHotelsQuery, landingLayoutQuery, promosQuery } from '../data/queries';
+import { useLoad } from '../data/useLoad';
+import { failureMessage } from '../errors/messages';
+import { useBrand } from '../app/brand';
+import { useRouter } from '../app/router';
+import { LANDING, SECTIONS } from './landing/sections';
 
 export const HotelLandingRegion = () => {
-  const tenant = useTenant();
+  const brand = useBrand();
   const router = useRouter();
 
-  const { data, status, error, retry, Scope } = useLoad(
+  /* A brand whose running order lives in the content system fetches it with
+     everything else — one call, still parallel, and no second status to
+     guard. A brand whose order is in config never issues the request. */
+  const fromCms = brand.landing === 'cms';
+
+  const { data, status, error, retry } = useLoad(
     {
       destinations: destinationsQuery(),
-      promos: promosQuery(),
+      /* A missing offers strip is a worse page, not a broken one. Marked
+         optional, its failure leaves `data.promos` undefined and the rest
+         of the landing page arrives as usual. */
+      promos: promosQuery().optional(),
       featured: featuredHotelsQuery(),
+      ...(fromCms ? { layout: landingLayoutQuery(brand.id) } : {}),
     },
-    { name: "hotel.landing", pageView: "LANDING_VIEWED" },
+    { pageView: 'LANDING_VIEWED' },
   );
 
-  if (status === "loading") return <LandingSkeleton />;
+  if (status === 'loading') return <LandingSkeleton />;
 
-  if (status === "error") {
+  if (status === 'error') {
     return (
       <Container>
-        <FailurePanel
-          surface="page"
-          message={failureMessage(error)}
-          onRetry={retry}
-        />
+        <FailurePanel surface="page" message={failureMessage(error)} onRetry={retry} />
       </Container>
     );
   }
 
+  /* Three sources, one shape. Config, the content system, or the shared
+     default — the loop below cannot tell which answered, which is the whole
+     argument: a page that is a list does not care where the list came from.
+
+     Ids the CMS names but we do not have are dropped rather than thrown on:
+     content can mention a block that was removed, and a page missing a section
+     is better than a page that will not render. */
+  /* The query set is conditional, so its result is too. One narrow read
+     rather than a cast at every use. */
+  const layout = (data as { layout?: string[] }).layout;
+
+  const sections: LandingSection[] = layout
+    ? layout.filter((id) => id in SECTIONS).map((id) => ({ id, Section: SECTIONS[id] }))
+    : Array.isArray(brand.landing) ? brand.landing : LANDING;
+  const onSearch = (destination: string) => router.go({ name: 'search', destination });
+
   return (
-    <Scope>
-      <HeroLayout
-        image={tenant.heroImage}
-        copy={
-          <>
-            <Text variant="displayLg" tone="onMedia">
-              {tenant.tagline}
-            </Text>
-            <Text variant="body" tone="onMedia">
-              {data.destinations.reduce((n, d) => n + d.propertyCount, 0)}{" "}
-              properties across {data.destinations.length} destinations.
-            </Text>
-          </>
-        }
-        search={
-          <SearchBar
-            vertical="hotel"
-            track={{ submit: "SEARCH_PERFORMED" }}
-            onSearch={(destination) =>
-              router.go({ name: "search", destination })
-            }
-          />
-        }
-      />
-
-      <Container>
-        <Section title={<Text variant="heading">Where members are going</Text>}>
-          <Grid columns={4}>
-            {data.destinations.slice(0, 4).map((destination) => (
-              <DestinationCard
-                key={destination.id}
-                destination={destination}
-                vertical="hotel"
-                track={{ select: "DESTINATION_SELECTED" }}
-                onSelect={(d) =>
-                  router.go({ name: "search", destination: d.name })
-                }
-              />
-            ))}
-          </Grid>
-        </Section>
-
-        <Section>
-          <Stack gap={5}>
-            {data.promos.map((promo, index) => (
-              <PromoBanner
-                key={promo.id}
-                promo={promo}
-                position={index}
-                eyebrow={hasLoyalty(tenant) ? "Member offer" : "Limited offer"}
-                track={{ impression: "PROMO_VIEWED", select: "PROMO_SELECTED" }}
-                onSelect={() => router.go({ name: "search", destination: "" })}
-              />
-            ))}
-          </Stack>
-        </Section>
-
-        <Section
-          title={<Text variant="heading">Featured stays</Text>}
-          action={
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.go({ name: "search", destination: "" })}
-            >
-              See all
-            </Button>
-          }
-        >
-          <Stack gap={4}>
-            {data.featured.map((hotel, index) => (
-              <HotelResultCard
-                key={hotel.id}
-                hotel={hotel}
-                businessModel={tenant.defaultBusinessModel}
-                position={index}
-                listId="landing-featured"
-                /* Only impressions and clicks matter here — the same card runs
-                   fully instrumented on search and uninstrumented on account. */
-                track={{
-                  impression: "PRODUCT_VIEWED",
-                  select: "PRODUCT_SELECTED",
-                }}
-                onSelect={() =>
-                  router.go({ name: "search", destination: hotel.destination })
-                }
-              />
-            ))}
-          </Stack>
-        </Section>
-      </Container>
-    </Scope>
+    <>
+      {sections.map(({ id, Section }) => (
+        <Section key={id} data={data} onSearch={onSearch} />
+      ))}
+    </>
   );
 };

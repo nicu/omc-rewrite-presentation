@@ -15,6 +15,8 @@ export const tokens: BrandTokens = {
   elevation: 1,
   buttonCase: 'uppercase',
   fontSize: 15,
+  /** This brand animates. What that looks like is the page's decision. */
+  animates: true,
 };
 
 export const theme = buildTheme(tokens);

@@ -1,0 +1,172 @@
+/* `idle` gets no rules at all: an element that was already on screen is a
+   plain element, with no transition waiting to catch a later change. */
+.reveal[data-state="hidden"],
+.reveal[data-state="shown"] {
+  transition:
+    opacity var(--reveal-duration) var(--easing-entrance),
+    transform var(--reveal-duration) var(--easing-entrance);
+}
+.reveal[data-state="hidden"] {
+  opacity: 0;
+  transform: translate(var(--reveal-x), var(--reveal-y));
+}
+.reveal[data-state="shown"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- the arrival ---------------------------------------------------------
+   These four are declared on the element rather than on :root, and that is the
+   point: they are not part of the scale a brand retunes. An arrival is a
+   moment in the product — the first sight of the app after signing in — and it
+   should feel the same everywhere. A brand decides *whether* it happens, in
+   `theme.animates`, and nothing else. Declared here, a brand stylesheet
+   cannot reach them: it can only set custom properties on :root, and a
+   property declared on the element itself wins for that subtree.
+
+   `settled` deliberately carries no transform, no filter and no transition:
+   once it has arrived it is an ordinary div again, so the sticky header and
+   anything fixed inside it behave normally for the rest of the session. */
+.arrival {
+  /* Deliberately larger than a section entrance. This is the one moment in the
+     product worth interrupting for — the first sight of the app as a member —
+     and at 1.06 it was polite enough that people asked whether anything had
+     happened. At 1.14 each visible edge travels about 63px on a 900px viewport
+     instead of 27px, which reads as the page settling rather than as a flicker.
+
+     Three durations, not one, and that is the whole trick. Scaled up together
+     they felt slow, and the reason was the blur: 16px of it holds for as long
+     as the movement does, and blurred text cannot be read, so the arrival is
+     over long before you are allowed to start reading. Splitting them lets the
+     page become legible in about half a second while the scale keeps easing to
+     rest behind it — bigger movement, and it feels quicker rather than slower.
+
+     Only the transform's end matters to the component: it settles on
+     `transitionend` for `transform`, which is the longest of the three. */
+  --arrival-scale: 1.14;
+  --arrival-blur: 16px;
+  --arrival-duration: 1200ms;
+  --arrival-fade: 450ms;
+  --arrival-defocus: 650ms;
+  /* A plain ease-out, and it took two goes to get here. Measured, the movement
+     each curve has spent by half the duration:
+
+       cubic-bezier(0.16, 1, 0.3, 1)     97%   an expo curve: over instantly
+       cubic-bezier(0.25, 0.6, 0.25, 1)  90%   still over by halfway
+       cubic-bezier(0, 0, 0.58, 1)       68%   a third still to come
+
+     The first two both left a long dead tail where nothing perceptible
+     happened, and the eye reads "finished" — so the transition's actual end
+     landed as a snap. Note also the zero first control point: curves with an
+     ease-in have moved 2-3% at a tenth of the time, which makes an arrival
+     hang before it starts. It should be moving from the first frame and only
+     ever slowing down. */
+  --arrival-easing: cubic-bezier(0, 0, 0.58, 1);
+}
+
+.arrival[data-state="hidden"],
+.arrival[data-state="shown"] {
+  /* The centre of the *viewport*, not of the page. This matters more than any
+     other line here. Our pages are several screens tall — 6282px against a
+     900px viewport on the landing page — so an origin given as a percentage
+     lands far below the fold, and scaling about a point you cannot see is a
+     translation, not a zoom: measured at `50% 40%`, the top edge moved 151px
+     up and the bottom of the viewport 97px up. Both edges travelling the same
+     way is why it read as the page sliding down into place.
+
+     Anchored to the middle of the screen instead, the visible edges move apart
+     symmetrically — 27px up and 27px down — so it reads as the page shrinking
+     to fit, which is the effect we were after.
+
+     `dvh`, not `vh`: `vh` is the tallest the viewport ever gets, so on a phone
+     showing its browser chrome half of it sits below the true centre. And the
+     component overwrites this with the measured visible centre before paint,
+     which also covers a page that is not scrolled to the top — this is the
+     value it starts from and the one that applies if measuring ever fails. */
+  transform-origin: 50% 50dvh;
+  transition:
+    opacity var(--arrival-fade) var(--arrival-easing),
+    transform var(--arrival-duration) var(--arrival-easing),
+    filter var(--arrival-defocus) var(--arrival-easing);
+}
+.arrival[data-state="hidden"] {
+  opacity: 0;
+  transform: scale(var(--arrival-scale));
+  filter: blur(var(--arrival-blur));
+}
+/* `none`, not `scale(1)` and `blur(0)` — they look identical and are not. An
+   identity transform or a zero blur still forces the element onto its own
+   layer, where text is drawn with grayscale antialiasing; dropping to `none`
+   at `settled` re-rasterises it and the text visibly sharpens, which is the
+   other half of what read as a snap. Ending the transition on the same values
+   `settled` uses makes that last step change nothing at all. Both interpolate
+   from their start value, so the animation is unaffected. */
+.arrival[data-state="shown"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrival[data-state] {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+:root[data-motion="off"] .arrival[data-state] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition: none;
+}
+
+/* A staggered group hands its own layout down, so the children it wraps sit
+   where the grid or the stack expects them to. */
+.group {
+  display: contents;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal[data-state] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* One attribute on the root stops every animation in the app — no React, no
+   props, no component told. The same lever a user setting would pull. */
+:root[data-motion="off"] .reveal[data-state] {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* --- swap ----------------------------------------------------------------
+   The box only ever holds a fixed height while it is animating between two
+   measured ones; the rest of the time it is `auto`, so content that grows
+   after the swap is not clipped. */
+/* Two wrappers now sit between a list and its items, which took the items out
+   of the flex row that was spacing them — the gap belonged to the parent and
+   suddenly applied to one child instead. `gap: inherit` hands it down through
+   both, so a list keeps its rhythm and this stays a component that does not
+   need to know what it is wrapping. */
+.swap { display: flex; flex-direction: column; gap: inherit; }
+.swapIn { display: flex; flex-direction: column; gap: inherit; }
+
+/* The incoming content fades up. `both` keeps the final frame, so nothing
+   flashes back to transparent when the animation ends. */
+.swapIn { animation: swap-in var(--duration-normal) var(--easing-entrance) both; }
+
+
+@keyframes swap-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .swapIn { animation: none; }
+}
+:root[data-motion='off'] .swapIn { animation: none; }

@@ -7,6 +7,9 @@
 
 export type BusinessModelId = 'cash' | 'earn-burn' | 'tier-rewards' | 'certificates';
 
+/** The kinds of thing you can book. Two of roughly twenty are built. */
+export type Vertical = 'hotel' | 'air';
+
 export type BusinessModel = {
   id: BusinessModelId;
   label: string;
@@ -28,6 +31,16 @@ export type Price =
   | { model: 'tier-rewards'; currency: string; publicAmount: number; memberAmount: number; tier: string }
   | { model: 'certificates'; currency: string; certificates: number; supplement: number };
 
+/** One bookable room type inside a property. It carries the same `Price`
+ *  union as the property itself — how you pay is the brand's decision, not
+ *  something that changes as you go deeper into the catalogue. */
+export type Room = {
+  id: string;
+  name: string;
+  description: string;
+  prices: Partial<Record<BusinessModelId, Price>>;
+};
+
 export type Hotel = {
   id: string;
   name: string;
@@ -40,6 +53,14 @@ export type Hotel = {
   description: string;
   prices: Partial<Record<BusinessModelId, Price>>;
   badge?: string;
+
+  /* The two fields a list does not carry. A search row is a summary: the
+     rooms and the long-form overview only come back when you ask for one
+     property by id. They are optional because that absence is real, and it is
+     what lets the details page tell what it already knows from the row it was
+     handed apart from what it is still waiting for. */
+  overview?: string;
+  rooms?: Room[];
 };
 
 /** A flight. Note it shares `Price` with Hotel — the way you pay is a
@@ -61,6 +82,22 @@ export type Flight = {
   badge?: string;
 };
 
+/**
+ * What a search answers with. Not just the rows: how many there are in total,
+ * and whether the server has finished looking.
+ *
+ * The last field is the one that matters. Availability is gathered from a
+ * dozen suppliers at different speeds, so the first response is rarely all of
+ * it — the server says "here is what I have, ask again". Modelling that here
+ * means the client can show what arrived instead of a spinner, and nobody has
+ * to hand-roll a polling loop per vertical.
+ */
+export type SearchResult<T> = {
+  items: T[];
+  total: number;
+  complete: boolean;
+};
+
 export type Destination = {
   id: string;
   name: string;
@@ -75,6 +112,40 @@ export type Promo = {
   body: string;
   image: string;
   cta: string;
+};
+
+/** The half-finished order. It lives on the server, so every step reads and
+ *  writes the same thing and a refresh loses nothing. */
+/**
+ * Who is travelling, and where the confirmation goes.
+ *
+ * Every field is optional because this is filled in a piece at a time — the
+ * form holds a half-answered one, and so does a cart that has been through
+ * the details step once. What a *complete* one looks like is not a property
+ * of the shape: it depends on the vertical, and that answer lives in
+ * `src/domain/travellers.ts`.
+ */
+export type Contact = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  /** ISO `YYYY-MM-DD`. Airlines ask for it; a stay never does. */
+  dateOfBirth?: string;
+};
+
+export type Cart = {
+  id: string;
+  /** What is being booked. Decides which details the traveller is asked for. */
+  vertical: Vertical;
+  /** How the reader chose to pay, back on the search or details page. Absent
+   *  until they have chosen, and ignored if this booking has no price in it. */
+  businessModel?: BusinessModelId;
+  itemName: string;
+  itemDetail: string;
+  prices: Partial<Record<BusinessModelId, Price>>;
+  contact?: Contact;
+  paymentMethodId?: string;
+  certificateId?: string;
 };
 
 export type MembershipTier = 'Standard' | 'Silver' | 'Gold' | 'Platinum';

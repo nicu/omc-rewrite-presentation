@@ -1,0 +1,36 @@
+/* ============================================================================
+   BRAND · FOLIO
+   Paper. A wide measure, a lot of air, and a serif doing the work that a box
+   does elsewhere.
+   ========================================================================= */
+
+:root[data-brand='folio'] {
+  --space-unit:          6px;
+  --radius-unit:         1px;
+  --font-size-base:      16px;
+  --font-family-display: 'Fraunces', Georgia, serif;
+  --font-family-body:    'Inter', system-ui, sans-serif;
+  --control-tracking:    var(--letter-spacing-wide);
+  --control-transform:   uppercase;
+  --control-font-weight: var(--font-weight-semibold);
+
+  --motion-distance-sm:   20px;
+  --motion-distance-md:   48px;
+  --motion-distance-lg:   96px;
+  --duration-fast:       320ms;
+  --duration-normal:     640ms;
+  --duration-slow:       900ms;
+  --motion-stagger:      110ms;
+}
+
+/* The price is a footnote here, not a headline — it settles at the foot of
+   the entry, under everything it is the price of. */
+:root[data-brand='folio'] {
+  --list-aside-align: end;
+
+  /* This brand pads a card by 36px, so the shared 12rem track leaves 120px for
+     whatever sits in it. A button reading BOOK THIS ROOM, in capitals with wide
+     tracking, wrapped onto two lines. The row is not wrong and neither is the
+     padding; the column just has to be wider here. */
+  --list-aside-width: 14rem;
+}
