@@ -1,0 +1,16 @@
+/* ============================================================================
+   TENANT · CABANA
+   Colour, radius and type now come from this brand's MUI theme, which emits
+   --mui-* variables. What is left here is the handful of values our own
+   layout stylesheets need and MUI does not publish.
+   ========================================================================= */
+
+:root[data-tenant='cabana'] {
+  --space-unit:          4px;
+  --radius-unit:         6px;
+  --font-size-base:      15px;
+  --font-family-display: 'Archivo', system-ui, sans-serif;
+  --font-family-body:    'Archivo', system-ui, sans-serif;
+  --control-font-weight: var(--font-weight-bold);
+  --card-padding:        var(--space-4);
+}

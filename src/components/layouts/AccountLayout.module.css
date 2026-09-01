@@ -1,0 +1,9 @@
+.layout { display: grid; grid-template-columns: minmax(0, 240px) minmax(0, 1fr); gap: var(--space-7); align-items: start; padding-block: var(--space-6); }
+.nav { display: flex; flex-direction: column; gap: var(--space-1); position: sticky; top: var(--space-5); }
+.content { display: flex; flex-direction: column; gap: var(--space-6); min-width: 0; }
+.summary { grid-column: 1 / -1; }
+
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .nav { position: static; flex-direction: row; overflow-x: auto; }
+}

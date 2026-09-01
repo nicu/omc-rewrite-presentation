@@ -1,0 +1,25 @@
+.summary { display: flex; align-items: center; justify-content: space-between; gap: var(--space-6); flex-wrap: wrap; }
+
+.cardMark {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: var(--space-7); height: var(--control-height-sm);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: var(--font-size-3xs); font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.navItem {
+  text-align: start;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--control-radius);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: background-color var(--duration-fast) var(--easing-standard);
+}
+.navItem:hover { background: var(--surface-sunken); }
+.navItem[aria-current='true'] { background: var(--surface-brand-subtle); color: var(--surface-brand-subtle-fg); font-weight: var(--font-weight-semibold); }

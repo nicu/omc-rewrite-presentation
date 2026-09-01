@@ -1,0 +1,5 @@
+/* The row shape lives in ListItemLayout. This is just the departure/arrival
+   strip, which is specific to a flight. */
+
+.times { display: grid; grid-template-columns: 1fr auto 1fr; gap: var(--space-4); align-items: center; }
+.line { display: block; width: var(--space-8); height: var(--border-width-thin); background: var(--border-default); }

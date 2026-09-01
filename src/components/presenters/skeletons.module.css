@@ -1,0 +1,3 @@
+.resultRow { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr) auto; gap: var(--space-5); padding: var(--card-padding); }
+.cardBody { padding: var(--card-padding); }
+@media (max-width: 760px) { .resultRow { grid-template-columns: minmax(0, 1fr); } }

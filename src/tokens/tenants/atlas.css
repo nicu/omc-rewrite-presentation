@@ -1,0 +1,17 @@
+/* ============================================================================
+   TENANT · ATLAS
+   Colour, radius and type now come from this brand's MUI theme, which emits
+   --mui-* variables. What is left here is the handful of values our own
+   layout stylesheets need and MUI does not publish.
+   ========================================================================= */
+
+:root[data-tenant='atlas'] {
+  --space-unit:          4px;
+  --radius-unit:         2px;
+  --font-size-base:      15px;
+  --font-family-display: 'Playfair Display', Georgia, serif;
+  --font-family-body:    'Inter', system-ui, sans-serif;
+  --control-tracking:    var(--letter-spacing-wide);
+  --control-transform:   uppercase;
+  --control-font-weight: var(--font-weight-semibold);
+}

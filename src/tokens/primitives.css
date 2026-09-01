@@ -1,0 +1,147 @@
+/* ============================================================================
+   PRIMITIVE TOKENS  ·  layer 1
+   Raw scales. Never referenced by a component — only by semantic.css and by
+   tenant files. If a component uses one of these directly, that's a bug.
+   ========================================================================= */
+
+:root {
+  /* --- spacing ----------------------------------------------------------
+     4px base. Tenants scale --space-unit to change global density.        */
+  --space-unit: 4px;
+  --space-0:  0;
+  --space-1:  calc(var(--space-unit) * 1);   /*  4 */
+  --space-2:  calc(var(--space-unit) * 2);   /*  8 */
+  --space-3:  calc(var(--space-unit) * 3);   /* 12 */
+  --space-4:  calc(var(--space-unit) * 4);   /* 16 */
+  --space-5:  calc(var(--space-unit) * 6);   /* 24 */
+  --space-6:  calc(var(--space-unit) * 8);   /* 32 */
+  --space-7:  calc(var(--space-unit) * 12);  /* 48 */
+  --space-8:  calc(var(--space-unit) * 16);  /* 64 */
+  --space-9:  calc(var(--space-unit) * 24);  /* 96 */
+
+  /* --- type scale -------------------------------------------------------
+     1.200 minor third from 16px. Tenants override --font-size-base.       */
+  --font-size-base: 16px;
+  --font-size-3xs: calc(var(--font-size-base) * 0.625);  /* 10 */
+  --font-size-2xs: calc(var(--font-size-base) * 0.75);   /* 12 */
+  --font-size-xs:  calc(var(--font-size-base) * 0.875);  /* 14 */
+  --font-size-sm:  var(--font-size-base);                /* 16 */
+  --font-size-md:  calc(var(--font-size-base) * 1.125);  /* 18 */
+  --font-size-lg:  calc(var(--font-size-base) * 1.375);  /* 22 */
+  --font-size-xl:  calc(var(--font-size-base) * 1.75);   /* 28 */
+  --font-size-2xl: calc(var(--font-size-base) * 2.25);   /* 36 */
+  --font-size-3xl: calc(var(--font-size-base) * 3);      /* 48 */
+  --font-size-4xl: calc(var(--font-size-base) * 4);      /* 64 */
+
+  --line-height-tight:   1.1;
+  --line-height-snug:    1.25;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.7;
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --letter-spacing-tight:  -0.02em;
+  --letter-spacing-normal:  0;
+  --letter-spacing-wide:    0.04em;
+  --letter-spacing-wider:   0.12em;
+
+  /* --- radius -----------------------------------------------------------
+     Tenants override --radius-unit for their whole corner personality.    */
+  --radius-unit: 4px;
+  --radius-none: 0;
+  --radius-sm:   calc(var(--radius-unit) * 0.5);
+  --radius-md:   calc(var(--radius-unit) * 1);
+  --radius-lg:   calc(var(--radius-unit) * 2);
+  --radius-xl:   calc(var(--radius-unit) * 3);
+  --radius-2xl:  calc(var(--radius-unit) * 5);
+  --radius-full: 999px;
+
+  /* --- borders ---------------------------------------------------------- */
+  --border-width-none:  0;
+  --border-width-thin:  1px;
+  --border-width-thick: 2px;
+  --border-width-heavy: 4px;
+
+  /* --- neutral ramp -----------------------------------------------------
+     Tenants override the whole ramp — it is never truly grey.             */
+  --color-neutral-0:    #ffffff;
+  --color-neutral-50:   #f8f9fa;
+  --color-neutral-100:  #f1f3f5;
+  --color-neutral-200:  #e9ecef;
+  --color-neutral-300:  #dee2e6;
+  --color-neutral-400:  #ced4da;
+  --color-neutral-500:  #adb5bd;
+  --color-neutral-600:  #868e96;
+  --color-neutral-700:  #495057;
+  --color-neutral-800:  #343a40;
+  --color-neutral-900:  #212529;
+  --color-neutral-1000: #0b0d0e;
+
+  /* --- brand + accent ramps (tenant-owned; these are fallbacks) --------- */
+  --color-brand-50:   #eef2ff;
+  --color-brand-100:  #e0e7ff;
+  --color-brand-200:  #c7d2fe;
+  --color-brand-400:  #818cf8;
+  --color-brand-500:  #6366f1;
+  --color-brand-600:  #4f46e5;
+  --color-brand-700:  #4338ca;
+  --color-brand-900:  #312e81;
+
+  --color-accent-50:  #fff7ed;
+  --color-accent-100: #ffedd5;
+  --color-accent-400: #fb923c;
+  --color-accent-500: #f97316;
+  --color-accent-600: #ea580c;
+  --color-accent-900: #7c2d12;
+
+  /* --- status ramps (shared across tenants; hue is semantic, not brand) - */
+  --color-success-50:  #ecfdf5;  --color-success-500: #10b981;  --color-success-700: #047857;
+  --color-warning-50:  #fffbeb;  --color-warning-500: #f59e0b;  --color-warning-700: #b45309;
+  --color-danger-50:   #fef2f2;  --color-danger-500:  #ef4444;  --color-danger-700:  #b91c1c;
+  --color-info-50:     #eff6ff;  --color-info-500:    #3b82f6;  --color-info-700:    #1d4ed8;
+
+  /* --- shadow ----------------------------------------------------------
+     Split into colour + geometry so a tenant can restyle either alone.
+     Cabana sets every --shadow-* to `none` and leans on borders instead.  */
+  --shadow-color: 220 12% 12%;
+  --shadow-strength: 0.10;
+
+  --shadow-1: 0 1px 2px  hsl(var(--shadow-color) / var(--shadow-strength));
+  --shadow-2: 0 2px 6px  hsl(var(--shadow-color) / var(--shadow-strength)),
+              0 1px 2px  hsl(var(--shadow-color) / calc(var(--shadow-strength) * 0.6));
+  --shadow-3: 0 6px 16px hsl(var(--shadow-color) / var(--shadow-strength)),
+              0 2px 4px  hsl(var(--shadow-color) / calc(var(--shadow-strength) * 0.5));
+  --shadow-4: 0 16px 32px hsl(var(--shadow-color) / calc(var(--shadow-strength) * 1.2)),
+              0 4px 8px   hsl(var(--shadow-color) / calc(var(--shadow-strength) * 0.6));
+
+  /* --- motion ----------------------------------------------------------- */
+  --duration-instant: 80ms;
+  --duration-fast:    140ms;
+  --duration-normal:  220ms;
+  --duration-slow:    360ms;
+  --easing-standard:  cubic-bezier(0.2, 0, 0, 1);
+  --easing-entrance:  cubic-bezier(0, 0, 0, 1);
+  --easing-exit:      cubic-bezier(0.3, 0, 1, 1);
+
+  /* --- z-index ---------------------------------------------------------- */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-overlay: 1000;
+  --z-modal:   1100;
+  --z-toast:   1200;
+
+  /* --- layout ----------------------------------------------------------- */
+  --container-sm:  640px;
+  --container-md:  900px;
+  --container-lg:  1160px;
+  --container-xl:  1400px;
+
+  /* --- fonts (tenant-owned; fallbacks only) ----------------------------- */
+  --font-family-display: ui-sans-serif, system-ui, sans-serif;
+  --font-family-body:    ui-sans-serif, system-ui, sans-serif;
+  --font-family-mono:    ui-monospace, SFMono-Regular, monospace;
+}

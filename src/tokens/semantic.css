@@ -1,0 +1,177 @@
+/* ============================================================================
+   SEMANTIC TOKENS  ·  layer 2
+   Role-based names for our own stylesheets — page layouts, grids, the few
+   things MUI does not draw.
+
+   Colour comes from the brand's MUI theme, which emits --mui-* variables at
+   runtime. Aliasing them here means there is one source of truth: change the
+   theme and both the MUI components and our layouts move together.
+   ========================================================================= */
+
+:root {
+  /* --- surfaces ---------------------------------------------------------
+     A surface is a background + its matching foreground + border.         */
+  --surface-page:            var(--mui-palette-background-default);
+  --surface-page-fg:         var(--mui-palette-text-primary);
+
+  --surface-raised:          var(--mui-palette-background-paper);
+  --surface-raised-fg:       var(--mui-palette-text-primary);
+
+  --surface-sunken:          var(--mui-palette-action-hover);
+  --surface-sunken-fg:       var(--mui-palette-text-primary);
+
+  --surface-inverse:         var(--mui-palette-text-primary);
+  --surface-inverse-fg:      var(--mui-palette-background-default);
+
+  --surface-brand:           var(--mui-palette-primary-main);
+  --surface-brand-fg:        var(--mui-palette-primary-contrastText);
+  --surface-brand-subtle:    rgba(var(--mui-palette-primary-mainChannel) / 0.12);
+  --surface-brand-subtle-fg: var(--mui-palette-primary-main);
+
+  --surface-brand-hover:     var(--mui-palette-primary-dark);
+  --surface-accent:          var(--mui-palette-secondary-main);
+  --surface-accent-fg:       var(--mui-palette-secondary-contrastText);
+  --surface-accent-hover:    var(--mui-palette-secondary-dark);
+  --surface-accent-subtle:   rgba(var(--mui-palette-secondary-mainChannel) / 0.12);
+  --surface-accent-subtle-fg:var(--mui-palette-secondary-main);
+
+  --surface-overlay:         hsl(var(--shadow-color) / 0.55);
+
+  /* Over imagery the contrast is set by the photo, not by the theme, so these
+     stay dark-on-light in every mode. "Inverse" would flip with the theme and
+     produce a white scrim on a dark brand. */
+  --surface-scrim:           hsl(222 34% 7%);
+  --text-on-media:           hsl(0 0% 100%);
+
+  /* --- text ------------------------------------------------------------- */
+  --text-primary:   var(--mui-palette-text-primary);
+  --text-secondary: var(--mui-palette-text-secondary);
+  --text-muted:     var(--mui-palette-text-secondary);
+  --text-inverse:   var(--mui-palette-background-default);
+  --text-brand:     var(--mui-palette-primary-main);
+  --text-accent:    var(--mui-palette-secondary-main);
+  --text-link:      var(--mui-palette-primary-main);
+  --text-disabled:  var(--mui-palette-text-disabled);
+  --text-on-brand:  var(--surface-brand-fg);
+
+  /* --- borders ---------------------------------------------------------- */
+  --border-subtle:  var(--mui-palette-divider);
+  --border-default: var(--mui-palette-divider);
+  --border-strong:  var(--mui-palette-text-disabled);
+  --border-brand:   var(--mui-palette-primary-main);
+  --border-focus:   var(--mui-palette-primary-main);
+
+  /* --- status ----------------------------------------------------------- */
+  --status-success-bg: var(--mui-palette-success-dark);
+  --status-success-fg: var(--mui-palette-success-contrastText);
+  --status-success-border: var(--mui-palette-success-main);
+  --status-warning-bg: var(--mui-palette-warning-dark);
+  --status-warning-fg: var(--mui-palette-warning-contrastText);
+  --status-warning-border: var(--mui-palette-warning-main);
+  --status-danger-bg:  var(--mui-palette-error-dark);
+  --status-danger-fg:  var(--mui-palette-error-contrastText);
+  --status-danger-border: var(--mui-palette-error-main);
+  --status-info-bg:    var(--mui-palette-info-dark);
+  --status-info-fg:    var(--mui-palette-info-contrastText);
+  --status-info-border: var(--mui-palette-info-main);
+
+  /* --- elevation --------------------------------------------------------
+     Named by intent, not by blur radius. Tenants remap the geometry.      */
+  --elevation-flat:    none;
+  --elevation-raised:  var(--shadow-1);
+  --elevation-card:    var(--shadow-2);
+  --elevation-popover: var(--shadow-3);
+  --elevation-modal:   var(--shadow-4);
+
+  /* --- typography roles -------------------------------------------------
+     Each role is family + size + weight + line-height + tracking together,
+     so a component asks for "display-lg", never for a font-size.          */
+  --type-display-lg-family: var(--font-family-display);
+  --type-display-lg-size:   var(--font-size-3xl);
+  --type-display-lg-weight: var(--font-weight-bold);
+  --type-display-lg-leading:var(--line-height-tight);
+  --type-display-lg-tracking: var(--letter-spacing-tight);
+
+  --type-display-md-family: var(--font-family-display);
+  --type-display-md-size:   var(--font-size-2xl);
+  --type-display-md-weight: var(--font-weight-bold);
+  --type-display-md-leading:var(--line-height-tight);
+  --type-display-md-tracking: var(--letter-spacing-tight);
+
+  --type-heading-family:  var(--font-family-display);
+  --type-heading-size:    var(--font-size-xl);
+  --type-heading-weight:  var(--font-weight-semibold);
+  --type-heading-leading: var(--line-height-snug);
+  --type-heading-tracking:var(--letter-spacing-normal);
+
+  --type-title-family:  var(--font-family-body);
+  --type-title-size:    var(--font-size-lg);
+  --type-title-weight:  var(--font-weight-semibold);
+  --type-title-leading: var(--line-height-snug);
+  --type-title-tracking:var(--letter-spacing-normal);
+
+  --type-body-family:  var(--font-family-body);
+  --type-body-size:    var(--font-size-sm);
+  --type-body-weight:  var(--font-weight-regular);
+  --type-body-leading: var(--line-height-normal);
+  --type-body-tracking:var(--letter-spacing-normal);
+
+  --type-caption-family:  var(--font-family-body);
+  --type-caption-size:    var(--font-size-xs);
+  --type-caption-weight:  var(--font-weight-regular);
+  --type-caption-leading: var(--line-height-normal);
+  --type-caption-tracking:var(--letter-spacing-normal);
+
+  --type-overline-family:  var(--font-family-body);
+  --type-overline-size:    var(--font-size-2xs);
+  --type-overline-weight:  var(--font-weight-semibold);
+  --type-overline-leading: var(--line-height-normal);
+  --type-overline-tracking:var(--letter-spacing-wider);
+
+  /* --- controls ---------------------------------------------------------
+     One place decides how tall and how round every interactive thing is.  */
+  --control-height-sm: calc(var(--space-unit) * 8);   /* 32 */
+  --control-height-md: calc(var(--space-unit) * 10);  /* 40 */
+  --control-height-lg: calc(var(--space-unit) * 12);  /* 48 */
+  --control-padding-x-sm: var(--space-3);
+  --control-padding-x-md: var(--space-4);
+  --control-padding-x-lg: var(--space-5);
+  --control-radius:       var(--mui-shape-borderRadius);
+  --control-border-width: var(--border-width-thin);
+  --control-font-weight:  var(--font-weight-semibold);
+  --control-tracking:     var(--letter-spacing-normal);
+  --control-transform:    none;
+
+  /* --- focus ------------------------------------------------------------ */
+  --focus-ring-width:  var(--border-width-thick);
+  --focus-ring-offset: 2px;
+  --focus-ring-color:  var(--border-focus);
+
+  /* --- card ------------------------------------------------------------- */
+  --card-surface:      var(--surface-raised);
+  --card-fg:           var(--surface-raised-fg);
+  --card-radius:       var(--mui-shape-borderRadius);
+  --card-padding:      var(--space-5);
+  --card-border-width: var(--border-width-none);
+  --card-border-color: var(--border-subtle);
+  --card-elevation:    var(--elevation-card);
+
+  /* --- field ------------------------------------------------------------ */
+  --field-surface:      var(--surface-raised);
+  --field-fg:           var(--text-primary);
+  --field-border-color: var(--border-default);
+  --field-border-width: var(--border-width-thin);
+  --field-radius:       var(--control-radius);
+  --field-height:       var(--control-height-md);
+  --field-padding-x:    var(--control-padding-x-md);
+
+  /* --- skeleton --------------------------------------------------------- */
+  --skeleton-base:      var(--surface-sunken);
+  --skeleton-highlight: var(--mui-palette-action-hover);
+
+  /* --- page rhythm ------------------------------------------------------ */
+  --page-max-width:     var(--container-lg);
+  --page-gutter:        var(--space-5);
+  --section-gap:        var(--space-8);
+  --stack-gap:          var(--space-4);
+}

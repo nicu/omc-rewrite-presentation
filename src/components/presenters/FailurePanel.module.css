@@ -1,0 +1,8 @@
+.panel { border-radius: var(--card-radius); border: var(--border-width-thin) solid; }
+.danger  { background: var(--status-danger-bg);  border-color: var(--status-danger-border); }
+.warning { background: var(--status-warning-bg); border-color: var(--status-warning-border); }
+.info    { background: var(--status-info-bg);    border-color: var(--status-info-border); }
+
+.inline { }
+.banner { width: 100%; }
+.page   { min-height: 50vh; display: grid; place-items: center; }

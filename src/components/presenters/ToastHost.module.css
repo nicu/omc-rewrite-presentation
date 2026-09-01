@@ -1,0 +1,23 @@
+.host {
+  position: fixed;
+  inset-block-start: var(--space-5);
+  inset-inline-end: var(--space-5);
+  z-index: var(--z-toast);
+  display: flex; flex-direction: column; gap: var(--space-2);
+  width: min(360px, calc(100vw - var(--space-6)));
+}
+.toast {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--card-radius);
+  border: var(--border-width-thin) solid;
+  box-shadow: var(--elevation-modal);
+  animation: slide var(--duration-normal) var(--easing-entrance);
+}
+.error   { background: var(--status-danger-bg);  border-color: var(--status-danger-border);  color: var(--status-danger-fg); }
+.warning { background: var(--status-warning-bg); border-color: var(--status-warning-border); color: var(--status-warning-fg); }
+.success { background: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-fg); }
+.close { color: inherit; font-size: var(--font-size-md); line-height: 1; opacity: 0.7; }
+.close:hover { opacity: 1; }
+
+@keyframes slide { from { opacity: 0; transform: translateX(var(--space-4)); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }

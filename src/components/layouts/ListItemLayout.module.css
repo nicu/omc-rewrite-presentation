@@ -1,0 +1,26 @@
+/* One row in a list. Used by stays results, flights results and past trips —
+   three different verticals and two different pages, one file. */
+
+.item { display: grid; align-items: stretch; min-width: 0; }
+.withMedia    { grid-template-columns: minmax(0, 260px) minmax(0, 1fr) auto; }
+.withoutMedia { grid-template-columns: minmax(0, 1fr) auto; }
+
+.body { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--card-padding); min-width: 0; }
+
+.aside {
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-end;
+  gap: var(--space-3);
+  padding: var(--card-padding);
+  border-inline-start: var(--border-width-thin) solid var(--border-subtle);
+}
+/* Nothing to separate when there is no media column and a short body. */
+.asideFlush { border-inline-start: none; }
+
+@media (max-width: 760px) {
+  .withMedia, .withoutMedia { grid-template-columns: minmax(0, 1fr); }
+  .aside {
+    border-inline-start: none;
+    border-block-start: var(--border-width-thin) solid var(--border-subtle);
+    align-items: stretch;
+  }
+}

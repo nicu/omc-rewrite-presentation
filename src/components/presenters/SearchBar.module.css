@@ -1,0 +1,2 @@
+.bar { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: var(--space-4); align-items: end; }
+@media (max-width: 760px) { .bar { grid-template-columns: minmax(0, 1fr); } }

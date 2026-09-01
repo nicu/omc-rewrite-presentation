@@ -1,0 +1,8 @@
+.price { display: flex; flex-direction: column; gap: var(--space-1); align-items: flex-end; }
+.row   { display: flex; align-items: baseline; gap: var(--space-2); }
+.amount { font-family: var(--type-title-family); font-size: var(--font-size-lg); font-weight: var(--font-weight-bold); color: var(--text-primary); line-height: var(--line-height-tight); }
+.amountLarge { font-size: var(--font-size-xl); }
+.struck { font-size: var(--font-size-xs); color: var(--text-muted); text-decoration: line-through; }
+.unit   { font-size: var(--font-size-2xs); color: var(--text-muted); }
+.earn   { font-size: var(--font-size-2xs); color: var(--text-accent); font-weight: var(--font-weight-semibold); }
+.supplement { font-size: var(--font-size-2xs); color: var(--text-secondary); }

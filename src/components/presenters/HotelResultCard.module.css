@@ -1,0 +1,17 @@
+/* The row shape now lives in ListItemLayout. What is left is specific to a
+   hotel: the amenity chips and the policy link. */
+
+.amenities { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.amenity {
+  font-size: var(--font-size-2xs);
+  color: var(--text-secondary);
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-sunken);
+  border-radius: var(--radius-sm);
+}
+.infoButton {
+  font-size: var(--font-size-2xs);
+  color: var(--text-link);
+  text-decoration: underline;
+  align-self: flex-start;
+}
