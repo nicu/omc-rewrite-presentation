@@ -10,11 +10,17 @@ export default defineConfig({
   base: "./",
   plugins: [react()],
   build: {
-    // Vite 8 strips global CSS (tokens, brand stylesheets) when chunkImportMap
+    // Vite 8 stripped global CSS (tokens, brand stylesheets) when chunkImportMap
     // is enabled — it treats CSS imported only for its side effects as "pure"
     // and drops it from the output.  Disabled so `src/tokens/*.css` and
     // `src/tokens/brands/*.css` always reach the browser.
     chunkImportMap: false,
+
+    // Vite 8 switched the default CSS minifier from esbuild to lightningcss.
+    // lightningcss drops the standard `backdrop-filter` when it contains an
+    // unresolvable `var()` token (#21954).  Use esbuild so the property
+    // survives intact.
+    cssMinify: "esbuild",
     rollupOptions: {
       input: {
         app: resolve(__dirname, "index.html"),
