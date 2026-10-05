@@ -10,6 +10,11 @@ export default defineConfig({
   base: "./",
   plugins: [react()],
   build: {
+    // Vite 8 strips global CSS (tokens, brand stylesheets) when chunkImportMap
+    // is enabled — it treats CSS imported only for its side effects as "pure"
+    // and drops it from the output.  Disabled so `src/tokens/*.css` and
+    // `src/tokens/brands/*.css` always reach the browser.
+    chunkImportMap: false,
     rollupOptions: {
       input: {
         app: resolve(__dirname, "index.html"),
